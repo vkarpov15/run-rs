@@ -1,6 +1,6 @@
 {
   "name": "run-rs",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Run a MongoDB replica set locally for development and clear the database each time",
   "main": "index.js",
   "bin": {
