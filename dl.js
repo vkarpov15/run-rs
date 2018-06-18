@@ -10,7 +10,7 @@ const filename = `${dirname}.tgz`;
 console.log(`Downloading MongoDB ${version}`);
 execSync(`curl -Ol http://downloads.mongodb.org/${getOS()}/${filename}`);
 execSync(`tar -zxvf ${filename}`);
-execSync(`mv ./${dirname}/bin ./node_modules/.bin/${version}`);
+execSync(`mv ./${dirname}/bin ${__dirname}/node_modules/.bin/${version}`);
 execSync(`rm -rf ./${dirname}`);
 execSync(`rm ./${filename}`);
 console.log(`Copied MongoDB ${version} to './node_modules/.bin/${version}'`);
