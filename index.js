@@ -12,11 +12,11 @@ const version = '3.6.5';
 co(run).catch(error => console.error(error.stack));
 
 function* run() {
-  execSync(`mkdir -p ${dirname}/data`);
-  execSync(`rm -rf ${__dirname}/data/*`);
-  execSync(`mkdir -p ${__dirname}/data/27017`);
-  execSync(`mkdir -p ${__dirname}/data/27017`);
-  execSync(`mkdir -p ${__dirname}/data/27017`);
+  execSync('mkdir -p ./data');
+  execSync('rm -rf ./data/*');
+  execSync('mkdir -p ./data/27017');
+  execSync('mkdir -p ./data/27018');
+  execSync('mkdir -p ./data/27019');
   const mongod = `${__dirname}/${version}/mongod`;
   console.log(`Running '${mongod}'`);
   const rs = new ReplSet(mongod, [
