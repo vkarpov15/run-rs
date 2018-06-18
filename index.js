@@ -1,3 +1,5 @@
+#!/usr/bin/node
+
 'use strict';
 
 const chalk = require('chalk');
