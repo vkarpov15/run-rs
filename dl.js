@@ -8,7 +8,7 @@ const dirname = `mongodb-${getOS()}-x86_64-${version}`;
 const filename = `${dirname}.tgz`;
 
 console.log(`Downloading MongoDB ${version}`);
-execSync(`curl -Ol http://downloads.mongodb.org/${getOS()}/${filename}`);
+execSync(`curl -OL http://downloads.mongodb.org/${getOS()}/${filename}`);
 execSync(`tar -zxvf ${filename}`);
 execSync(`mv ./${dirname}/bin ./${version}`);
 execSync(`rm -rf ./${dirname}`);
