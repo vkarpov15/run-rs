@@ -20,9 +20,9 @@ function* run() {
   const mongod = `${__dirname}/${version}/mongod`;
   console.log(`Running '${mongod}'`);
   const rs = new ReplSet(mongod, [
-    { port: 27017, dbpath: `${__dirname}/data/27017` },
-    { port: 27018, dbpath: `${__dirname}/data/27018` },
-    { port: 27019, dbpath: `${__dirname}/data/27019` }
+    { port: 27017, dbpath: `${process.cwd()}/data/27017` },
+    { port: 27018, dbpath: `${process.cwd()}/data/27018` },
+    { port: 27019, dbpath: `${process.cwd()}/data/27019` }
   ].map(opts => ({
     options: Object.assign(opts, { bind_ip: 'localhost' })
   })), { replSet: 'rs' });
@@ -67,7 +67,7 @@ function* run() {
     if ('o2' in data) {
       o = `${require('util').inspect(data.o2)} ${o}`;
     }
-    console.log(moment().format('YYYY-MM-DD HH:mm:ss'), op, o);
+    console.log(moment().format('YYYY-MM-DD HH:mm:ss'), data.ns, op, o);
   })
   oplog.on('error', err => {
     console.log(moment().format('YYYY-MM-DD HH:mm:ss'), chalk.red(`Oplog error: ${err.stack}`));
