@@ -17,8 +17,9 @@ function* run() {
   execSync('mkdir -p ./data/27017');
   execSync('mkdir -p ./data/27018');
   execSync('mkdir -p ./data/27019');
-  console.log(`Running '${__dirname}/node_modules/.bin/${version}/bin/mongod'`);
-  const rs = new ReplSet(`${__dirname}/node_modules/.bin/${version}/mongod`, [
+  const mongod = `${__dirname}/node_modules/run-rs/${version}/mongod`;
+  console.log(`Running '${mongod}'`);
+  const rs = new ReplSet(mongod, [
     { port: 27017, dbpath: `${__dirname}/data/27017` },
     { port: 27018, dbpath: `${__dirname}/data/27018` },
     { port: 27019, dbpath: `${__dirname}/data/27019` }
