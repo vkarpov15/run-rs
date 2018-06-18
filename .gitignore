@@ -62,3 +62,5 @@ typings/
 
 data
 package-lock.json
+3.*
+4.*
