@@ -1,10 +1,12 @@
-#!/usr/bin/node
+#!/usr/bin/env node
 
 'use strict';
 
 const chalk = require('chalk');
 const co = require('co');
+const dl = require('./dl');
 const execSync = require('child_process').execSync;
+const fs = require('fs');
 const moment = require('moment');
 const mongodb = require('mongodb');
 const ReplSet = require('mongodb-topology-manager').ReplSet;
@@ -14,12 +16,16 @@ const version = '3.6.5';
 co(run).catch(error => console.error(error.stack));
 
 function* run() {
+  const mongod = `${__dirname}/${version}/mongod`;
+  if (!fs.existsSync(mongod)) {
+    dl();
+  }
+
   execSync('mkdir -p ./data');
   execSync('rm -rf ./data/*');
   execSync('mkdir -p ./data/27017');
   execSync('mkdir -p ./data/27018');
   execSync('mkdir -p ./data/27019');
-  const mongod = `${__dirname}/${version}/mongod`;
   console.log(`Running '${mongod}'`);
   const rs = new ReplSet(mongod, [
     { port: 27017, dbpath: `${process.cwd()}/data/27017` },

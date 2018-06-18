@@ -4,16 +4,21 @@ const execSync = require('child_process').execSync;
 
 const version = '3.6.5';
 
-const dirname = `mongodb-${getOS()}-x86_64-${version}`;
-const filename = `${dirname}.tgz`;
+module.exports = function dl() {
+  const os = getOS();
+  const filename = os === 'osx' ?
+    `mongodb-${getOS()}-ssl-x86_64-${version}.tgz` :
+    `mongodb-${getOS()}-x86_64-${version}.tgz`;
+  const dirname = `mongodb-${getOS()}-x86_64-${version}`;
 
-console.log(`Downloading MongoDB ${version}`);
-execSync(`curl -OL http://downloads.mongodb.org/${getOS()}/${filename}`);
-execSync(`tar -zxvf ${filename}`);
-execSync(`mv ./${dirname}/bin ./${version}`);
-execSync(`rm -rf ./${dirname}`);
-execSync(`rm ./${filename}`);
-console.log(`Copied MongoDB ${version} to './node_modules/run-rs/${version}'`);
+  console.log(`Downloading MongoDB ${version}`);
+  execSync(`curl -OL http://downloads.mongodb.org/${getOS()}/${filename}`);
+  execSync(`tar -zxvf ${filename}`);
+  execSync(`mv ./${dirname}/bin ./${version}`);
+  execSync(`rm -rf ./${dirname}`);
+  execSync(`rm ./${filename}`);
+  console.log(`Copied MongoDB ${version} to './node_modules/run-rs/${version}'`);
+};
 
 function getOS() {
   const os = require('os');
