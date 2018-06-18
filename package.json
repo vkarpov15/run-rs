@@ -1,0 +1,30 @@
+{
+  "name": "run-rs",
+  "version": "0.0.1",
+  "description": "Run a MongoDB replica set locally for development and clear the database each time",
+  "main": "index.js",
+  "bin": {
+    "run-rs": "."
+  },
+  "scripts": {
+    "postinstall": "node ./dl.js"
+  },
+  "author": "Valeri Karpov <val@karpov.io>",
+  "license": "Apache 2.0",
+  "keywords": [
+    "mongodb",
+    "replica"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/vkarpov15/run-rs.git"
+  },
+  "dependencies": {
+    "chalk": "2.4.1",
+    "co": "4.6.0",
+    "moment": "2.22.2",
+    "mongodb": "3.x",
+    "mongodb-topology-manager": "1.x"
+  },
+  "devDependencies": {}
+}
