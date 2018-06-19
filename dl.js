@@ -14,10 +14,10 @@ module.exports = function dl() {
   console.log(`Downloading MongoDB ${version}`);
   execSync(`curl -OL http://downloads.mongodb.org/${getOS()}/${filename}`);
   execSync(`tar -zxvf ${filename}`);
-  execSync(`mv ./${dirname}/bin ./${version}`);
+  execSync(`mv ./${dirname}/bin ${__dirname}/${version}`);
   execSync(`rm -rf ./${dirname}`);
   execSync(`rm ./${filename}`);
-  console.log(`Copied MongoDB ${version} to './node_modules/run-rs/${version}'`);
+  console.log(`Copied MongoDB ${version} to '${__dirname}/${version}'`);
 };
 
 function getOS() {
