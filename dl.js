@@ -2,9 +2,7 @@
 
 const execSync = require('child_process').execSync;
 
-const version = '3.6.5';
-
-module.exports = function dl() {
+module.exports = function dl(version = '3.6.5') {
   const os = getOS();
   const filename = os === 'osx' ?
     `mongodb-${getOS()}-ssl-x86_64-${version}.tgz` :
