@@ -4,6 +4,7 @@
 
 const chalk = require('chalk');
 const co = require('co');
+const commander = require('commander');
 const dl = require('./dl');
 const execSync = require('child_process').execSync;
 const fs = require('fs');
@@ -11,14 +12,18 @@ const moment = require('moment');
 const mongodb = require('mongodb');
 const ReplSet = require('mongodb-topology-manager').ReplSet;
 
-const version = '3.6.5';
+commander.
+  option('-v, --version [version]', 'Version to use').
+  parse(process.argv);
+
+const version = commander.version || '3.6.5';
 
 co(run).catch(error => console.error(error.stack));
 
 function* run() {
   const mongod = `${__dirname}/${version}/mongod`;
   if (!fs.existsSync(mongod)) {
-    dl();
+    dl(version);
   }
 
   execSync('mkdir -p ./data');
