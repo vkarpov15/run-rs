@@ -17,7 +17,7 @@ commander.
   option('-k, --keep', 'Use this flag to skip clearing the database on startup').
   parse(process.argv);
 
-const version = commander.v || '3.6.4';
+const version = commander.v || '3.6.5';
 
 co(run).catch(error => console.error(error.stack));
 
