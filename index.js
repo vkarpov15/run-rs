@@ -14,9 +14,10 @@ const ReplSet = require('mongodb-topology-manager').ReplSet;
 
 commander.
   option('-v, --version [version]', 'Version to use').
+  option('-k, --keep', 'Use this flag to skip clearing the database on startup').
   parse(process.argv);
 
-const version = commander.version || '3.6.5';
+const version = commander.v || '3.6.4';
 
 co(run).catch(error => console.error(error.stack));
 
@@ -27,10 +28,15 @@ function* run() {
   }
 
   execSync('mkdir -p ./data');
-  execSync('rm -rf ./data/*');
-  execSync('mkdir -p ./data/27017');
-  execSync('mkdir -p ./data/27018');
-  execSync('mkdir -p ./data/27019');
+  if (commander.keep) {
+    console.log(chalk.blue('Skipping purge'));
+  } else {
+    console.log(chalk.blue('Purging database...'));
+    execSync('rm -rf ./data/*');
+    execSync('mkdir -p ./data/27017');
+    execSync('mkdir -p ./data/27018');
+    execSync('mkdir -p ./data/27019');
+  }
   console.log(`Running '${mongod}'`);
   const rs = new ReplSet(mongod, [
     { port: 27017, dbpath: `${process.cwd()}/data/27017` },
@@ -40,9 +46,16 @@ function* run() {
     options: Object.assign(opts, { bind_ip: 'localhost' })
   })), { replSet: 'rs' });
 
-  console.log(chalk.blue('Starting replica set...'));
-
-  yield rs.start();
+  if (commander.keep) {
+    console.log(chalk.blue('Restarting replica set...'));
+    for (const manager of rs.managers) {
+      yield manager.start();
+    }
+    yield rs.waitForPrimary();
+  } else {
+    console.log(chalk.blue('Starting replica set...'));
+    yield rs.start();
+  }
 
   console.log(chalk.green('Started replica set on "mongodb://localhost:27017,localhost:27018,localhost:27019"'));
 
@@ -60,7 +73,7 @@ function* run() {
 
   oplog.on('end', () => {
     console.log(moment().format('YYYY-MM-DD HH:mm:ss'), chalk.red('MongoDB oplog finished'));
-  })
+  });
   oplog.on('data', data => {
     if (['n'].includes(data.op)) {
       return;
@@ -81,8 +94,8 @@ function* run() {
       o = `${require('util').inspect(data.o2)} ${o}`;
     }
     console.log(moment().format('YYYY-MM-DD HH:mm:ss'), data.ns, op, o);
-  })
+  });
   oplog.on('error', err => {
     console.log(moment().format('YYYY-MM-DD HH:mm:ss'), chalk.red(`Oplog error: ${err.stack}`));
-  })
+  });
 };
