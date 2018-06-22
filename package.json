@@ -23,7 +23,8 @@
     "commander": "2.15.1",
     "moment": "2.22.2",
     "mongodb": "3.x",
-    "mongodb-topology-manager": "1.x"
+    "mongodb-topology-manager": "1.x",
+    "prettyjson": "1.2.1"
   },
   "devDependencies": {}
 }

@@ -10,6 +10,7 @@ const execSync = require('child_process').execSync;
 const fs = require('fs');
 const moment = require('moment');
 const mongodb = require('mongodb');
+const prettyjson = require('prettyjson');
 const ReplSet = require('mongodb-topology-manager').ReplSet;
 
 commander.
@@ -89,13 +90,14 @@ function* run() {
     };
     const op = ops[data.op] || data.op;
 
-    let o = require('util').inspect(data.o);
+    let o = prettyjson.render(JSON.parse(JSON.stringify(data.o)));
     if ('o2' in data) {
-      o = `${require('util').inspect(data.o2)} ${o}`;
+      o = `${prettyjson.render(JSON.parse(JSON.stringify(data.o2)))} ${o}`;
     }
-    console.log(moment().format('YYYY-MM-DD HH:mm:ss'), data.ns, op, o);
+    console.log(chalk.blue(moment().format('YYYY-MM-DD HH:mm:ss')), data.ns, op);
+    console.log(o);
   });
   oplog.on('error', err => {
-    console.log(moment().format('YYYY-MM-DD HH:mm:ss'), chalk.red(`Oplog error: ${err.stack}`));
+    console.log(chalk.red(moment().format('YYYY-MM-DD HH:mm:ss')), chalk.red(`Oplog error: ${err.stack}`));
   });
 };
