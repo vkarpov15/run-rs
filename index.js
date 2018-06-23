@@ -18,11 +18,16 @@ commander.
   option('-k, --keep', 'Use this flag to skip clearing the database on startup').
   parse(process.argv);
 
-const version = commander.v || '3.6.5';
-
 co(run).catch(error => console.error(error.stack));
 
 function* run() {
+  const options = {};
+  const rcfile = `${process.cwd()}/.run-rs.rc`;
+  if (fs.existsSync(rcfile)) {
+    Object.assign(options, JSON.parse(fs.readFileSync(rcfile, 'utf8')));
+  }
+  const version = commander.v || options.version || '3.6.5';
+
   const mongod = `${__dirname}/${version}/mongod`;
   if (!fs.existsSync(mongod)) {
     dl(version);
