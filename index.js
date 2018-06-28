@@ -65,7 +65,9 @@ function* run() {
 
   console.log(chalk.green('Started replica set on "mongodb://localhost:27017,localhost:27018,localhost:27019"'));
 
-  const client = yield mongodb.MongoClient.connect('mongodb://localhost:27017/test');
+  const client = yield mongodb.MongoClient.connect('mongodb://localhost:27017/test', {
+    useNewUrlParser: true
+  });
 
   const oplog = client.db('local').collection('oplog.rs').find({ ts: { $gte: new mongodb.Timestamp() } }, {
     tailable: true,
