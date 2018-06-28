@@ -70,7 +70,7 @@ function* run() {
 
   if (commander.shell) {
     console.log(chalk.blue(`Running mongo shell: ${mongo}`));
-    spawn(mongo, [], { stdio: 'inherit' });
+    spawn(mongo, ['--quiet'], { stdio: 'inherit' });
   } else {
     const client = yield mongodb.MongoClient.connect('mongodb://localhost:27017/test', {
       useNewUrlParser: true

@@ -33,3 +33,25 @@ run-rs --keep
 ## OS Support
 
 Run-rs supports Linux and OSX. Windows is **not** currently supported.
+
+## Shell Option
+
+Use the `--shell` flag to start a MongoDB shell connected to your replica
+set once the replica set is running.
+
+```
+$ run-rs --shell
+Purging database...
+Running '/home/node/lib/node_modules/run-rs/3.6.5/mongod'
+Starting replica set...
+Started replica set on "mongodb://localhost:27017,localhost:27018,localhost:27019"
+Connecting shell /home/node/lib/node_modules/run-rs/3.6.5/mongo
+rs:PRIMARY>
+```
+
+## Running in Production
+
+Do **not** use run-rs for running your production database. Run-rs is designed
+for local development and testing, and is not intended for production use.
+If you want to run MongoDB in production and don't want to manage a replica
+set yourself, use [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
