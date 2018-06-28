@@ -2,6 +2,7 @@
 
 'use strict';
 
+const ReplSet = require('mongodb-topology-manager').ReplSet;
 const chalk = require('chalk');
 const co = require('co');
 const commander = require('commander');
@@ -11,11 +12,12 @@ const fs = require('fs');
 const moment = require('moment');
 const mongodb = require('mongodb');
 const prettyjson = require('prettyjson');
-const ReplSet = require('mongodb-topology-manager').ReplSet;
+const spawn = require('child_process').spawn;
 
 commander.
   option('-v, --version [version]', 'Version to use').
   option('-k, --keep', 'Use this flag to skip clearing the database on startup').
+  option('-s, --shell', 'Use this flag to automatically open up a MongoDB shell when the replica set is started')
   parse(process.argv);
 
 co(run).catch(error => console.error(error.stack));
@@ -29,6 +31,7 @@ function* run() {
   const version = commander.v || options.version || '3.6.5';
 
   const mongod = `${__dirname}/${version}/mongod`;
+  const mongo = `${__dirname}/${version}/mongo`;
   if (!fs.existsSync(mongod)) {
     dl(version);
   }
@@ -65,46 +68,51 @@ function* run() {
 
   console.log(chalk.green('Started replica set on "mongodb://localhost:27017,localhost:27018,localhost:27019"'));
 
-  const client = yield mongodb.MongoClient.connect('mongodb://localhost:27017/test', {
-    useNewUrlParser: true
-  });
+  if (commander.shell) {
+    console.log(chalk.blue(`Running mongo shell: ${mongo}`));
+    spawn(mongo, [], { stdio: 'inherit' });
+  } else {
+    const client = yield mongodb.MongoClient.connect('mongodb://localhost:27017/test', {
+      useNewUrlParser: true
+    });
 
-  const oplog = client.db('local').collection('oplog.rs').find({ ts: { $gte: new mongodb.Timestamp() } }, {
-    tailable: true,
-    awaitData: true,
-    oplogReplay: true,
-    noCursorTimeout: true,
-    numberOfRetries: Number.MAX_VALUE
-  }).stream();
+    const oplog = client.db('local').collection('oplog.rs').find({ ts: { $gte: new mongodb.Timestamp() } }, {
+      tailable: true,
+      awaitData: true,
+      oplogReplay: true,
+      noCursorTimeout: true,
+      numberOfRetries: Number.MAX_VALUE
+    }).stream();
 
-  console.log(chalk.green('Connected to oplog'));
+    console.log(chalk.green('Connected to oplog'));
 
-  oplog.on('end', () => {
-    console.log(moment().format('YYYY-MM-DD HH:mm:ss'), chalk.red('MongoDB oplog finished'));
-  });
-  oplog.on('data', data => {
-    if (['n'].includes(data.op)) {
-      return;
-    }
-    if (data.ns.startsWith('admin.') || data.ns.startsWith('config.')) {
-      return;
-    }
-    const ops = {
-      c: 'createCollection',
-      d: 'delete',
-      i: 'insert',
-      u: 'update'
-    };
-    const op = ops[data.op] || data.op;
+    oplog.on('end', () => {
+      console.log(moment().format('YYYY-MM-DD HH:mm:ss'), chalk.red('MongoDB oplog finished'));
+    });
+    oplog.on('data', data => {
+      if (['n'].includes(data.op)) {
+        return;
+      }
+      if (data.ns.startsWith('admin.') || data.ns.startsWith('config.')) {
+        return;
+      }
+      const ops = {
+        c: 'createCollection',
+        d: 'delete',
+        i: 'insert',
+        u: 'update'
+      };
+      const op = ops[data.op] || data.op;
 
-    let o = prettyjson.render(JSON.parse(JSON.stringify(data.o)));
-    if ('o2' in data) {
-      o = `${prettyjson.render(JSON.parse(JSON.stringify(data.o2)))} ${o}`;
-    }
-    console.log(chalk.blue(moment().format('YYYY-MM-DD HH:mm:ss')), data.ns, op);
-    console.log(o);
-  });
-  oplog.on('error', err => {
-    console.log(chalk.red(moment().format('YYYY-MM-DD HH:mm:ss')), chalk.red(`Oplog error: ${err.stack}`));
-  });
+      let o = prettyjson.render(JSON.parse(JSON.stringify(data.o)));
+      if ('o2' in data) {
+        o = `${prettyjson.render(JSON.parse(JSON.stringify(data.o2)))} ${o}`;
+      }
+      console.log(chalk.blue(moment().format('YYYY-MM-DD HH:mm:ss')), data.ns, op);
+      console.log(o);
+    });
+    oplog.on('error', err => {
+      console.log(chalk.red(moment().format('YYYY-MM-DD HH:mm:ss')), chalk.red(`Oplog error: ${err.stack}`));
+    });
+  }
 };
