@@ -29,3 +29,7 @@ Run-rs clears the database every time it starts by default. To override this beh
 ```
 run-rs --keep
 ```
+
+## OS Support
+
+Run-rs supports Linux and OSX. Windows is **not** currently supported.
