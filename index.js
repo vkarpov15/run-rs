@@ -17,7 +17,7 @@ const spawn = require('child_process').spawn;
 commander.
   option('-v, --version [version]', 'Version to use').
   option('-k, --keep', 'Use this flag to skip clearing the database on startup').
-  option('-s, --shell', 'Use this flag to automatically open up a MongoDB shell when the replica set is started')
+  option('-s, --shell', 'Use this flag to automatically open up a MongoDB shell when the replica set is started').
   parse(process.argv);
 
 co(run).catch(error => console.error(error.stack));
