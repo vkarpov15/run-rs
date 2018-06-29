@@ -28,7 +28,7 @@ function* run() {
   if (fs.existsSync(rcfile)) {
     Object.assign(options, JSON.parse(fs.readFileSync(rcfile, 'utf8')));
   }
-  const version = commander.v || options.version || '3.6.5';
+  const version = commander.version || options.version || '3.6.5';
 
   const mongod = `${__dirname}/${version}/mongod`;
   const mongo = `${__dirname}/${version}/mongo`;
