@@ -16,10 +16,10 @@ With run-rs, starting a 3 node [replica set](https://docs.mongodb.com/manual/tut
 run-rs
 ```
 
-To use a different version, use the `-v` flag. For example, this will start a 3 node replica set using MongoDB 4.0.0-rc2.
+To use a different version, use the `-v` flag. For example, this will start a 3 node replica set using MongoDB 4.0.0.
 
 ```
-run-rs -v 4.0.0-rc2
+run-rs -v 4.0.0
 ```
 
 ## Clearing the Database
