@@ -51,7 +51,7 @@ rs:PRIMARY>
 
 ## Notes on Connecting
 
-The replicaSet setName is `rs`. 
+Use `replicaSet=rs` in your connection string. 
 
 ## Running in Production
 
