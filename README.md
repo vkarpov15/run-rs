@@ -49,6 +49,10 @@ Connecting shell /home/node/lib/node_modules/run-rs/3.6.5/mongo
 rs:PRIMARY>
 ```
 
+## Notes on Connecting
+
+The replicaSet setName is `rs`. 
+
 ## Running in Production
 
 Do **not** use run-rs for running your production database. Run-rs is designed
