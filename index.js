@@ -68,7 +68,7 @@ function* run() {
     yield rs.start();
   }
 
-  console.log(chalk.green('Started replica set on "mongodb://localhost:27017,localhost:27018,localhost:27019"'));
+  console.log(chalk.green('Started replica set on "mongodb://localhost:27017,localhost:27018,localhost:27019?replicaSet=rs"'));
 
   if (commander.shell) {
     console.log(chalk.blue(`Running mongo shell: ${mongo}`));
