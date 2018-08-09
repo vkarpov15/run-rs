@@ -64,7 +64,20 @@ function* run() {
     for (const manager of rs.managers) {
       yield manager.start();
     }
-    yield rs.waitForPrimary();
+    const result = yield rs.managers[0].executeCommand('admin.$cmd', {
+      replSetGetStatus: 1
+    }, null, { ignoreError: true });
+
+    if (result.set) {
+      // There's already a replica set config, so don't initiate
+      yield rs.waitForPrimary();
+    } else {
+      // First time starting up, need to create a replica set config
+      for (const manager of rs.managers) {
+        yield manager.stop();
+      }
+      yield rs.start();
+    }
   } else {
     console.log(chalk.blue('Starting replica set...'));
     yield rs.start();
