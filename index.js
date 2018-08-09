@@ -44,10 +44,12 @@ function* run() {
   } else {
     console.log(chalk.blue('Purging database...'));
     execSync('rm -rf ./data/*');
-    execSync('mkdir -p ./data/27017');
-    execSync('mkdir -p ./data/27018');
-    execSync('mkdir -p ./data/27019');
   }
+
+  execSync('mkdir -p ./data/27017');
+  execSync('mkdir -p ./data/27018');
+  execSync('mkdir -p ./data/27019');
+
   console.log(`Running '${mongod}'`);
   const rs = new ReplSet(mongod, [
     { port: 27017, dbpath: `${process.cwd()}/data/27017` },
