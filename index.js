@@ -56,7 +56,7 @@ function* run() {
     { port: 27018, dbpath: `${process.cwd()}/data/27018` },
     { port: 27019, dbpath: `${process.cwd()}/data/27019` }
   ].map(opts => ({
-    options: Object.assign(opts, { bind_ip: 'localhost' })
+    options: Object.assign(opts, { bind_ip: '127.0.0.1' })
   })), { replSet: 'rs' });
 
   if (commander.keep) {
