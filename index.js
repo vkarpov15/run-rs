@@ -18,6 +18,7 @@ commander.
   option('-v, --version [version]', 'Version to use').
   option('-k, --keep', 'Use this flag to skip clearing the database on startup').
   option('-s, --shell', 'Use this flag to automatically open up a MongoDB shell when the replica set is started').
+  option('-q, --quiet', 'Use this flag to suppress any output after starting').
   parse(process.argv);
 
 co(run).catch(error => console.error(error.stack));
@@ -88,7 +89,7 @@ function* run() {
   if (commander.shell) {
     console.log(chalk.blue(`Running mongo shell: ${mongo}`));
     spawn(mongo, ['--quiet'], { stdio: 'inherit' });
-  } else {
+  } else if (!commander.quiet) {
     const client = yield mongodb.MongoClient.connect('mongodb://localhost:27017/test', {
       useNewUrlParser: true
     });
