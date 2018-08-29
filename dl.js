@@ -1,29 +1,57 @@
 'use strict';
 
 const execSync = require('child_process').execSync;
+module.exports = function dl(version = '3.6.6') {
+  const versionMatch = version.match(/^(\d)\.(\d)\.(\d+)$/);
+  if (!versionMatch) throw new Error('Version must be in x.x.x format');
+  const major = parseInt(versionMatch[1]);
+  const minor = parseInt(versionMatch[2]);
+  const patch = parseInt(versionMatch[3]);
 
-module.exports = function dl(version = '3.6.5') {
-  const os = getOS();
-  const filename = os === 'osx' ?
-    `mongodb-${getOS()}-ssl-x86_64-${version}.tgz` :
-    `mongodb-${getOS()}-x86_64-${version}.tgz`;
-  const dirname = `mongodb-${getOS()}-x86_64-${version}`;
+  let os = process.platform;
+  let dirname;
+  let filename;
+
+  switch(os) {
+    case 'linux':
+      filename = `mongodb-linux-x86_64-${version}.tgz`
+      dirname = `mongodb-linux-x86_64-${version}`;
+      break;
+    case 'darwin':
+      os = 'osx'
+      filename = `mongodb-osx-ssl-x86_64-${version}.tgz`;
+      dirname = `mongodb-osx-x86_64-${version}`;
+      break;
+    case 'win32':
+      if (major < 3) {
+        filename = `mongodb-win32-x86_64-2008plus-${version}.zip`;
+        dirname = `mongodb-win32-x86_64-2008plus-${version}`;
+      } else {
+        filename = `mongodb-win32-x86_64-2008plus-ssl-${version}.zip`;
+        dirname = `mongodb-win32-x86_64-2008plus-ssl-${version}`;
+      }
+      break;
+    default:
+      throw new Error(`Unrecognized os ${os}`);
+  }
 
   console.log(`Downloading MongoDB ${version}`);
-  execSync(`curl -OL http://downloads.mongodb.org/${getOS()}/${filename}`);
-  execSync(`tar -zxvf ${filename}`);
-  execSync(`mv ./${dirname}/bin ${__dirname}/${version}`);
-  execSync(`rm -rf ./${dirname}`);
-  execSync(`rm ./${filename}`);
+  if (os === 'win32') {
+    execSync(`powershell.exe -nologo -noprofile -command "&{` + 
+      `Add-Type -AssemblyName System.IO.Compression.FileSystem;` +
+      `(New-Object Net.WebClient).DownloadFile('http://downloads.mongodb.org/${os}/${filename}', '${filename}');` +
+      `[System.IO.Compression.ZipFile]::ExtractToDirectory('${filename}','.');` +
+      `mv './${dirname}/bin' '${__dirname}/${version}';` +
+      `rd -r './${dirname}';` +
+      `rm './${filename}';` +
+      `}"`
+    );
+  } else {
+    execSync(`curl -OL http://downloads.mongodb.org/${os}/${filename}`);
+    execSync(`tar -zxvf ${filename}`);
+    execSync(`mv ./${dirname}/bin ${__dirname}/${version}`);
+    execSync(`rm -rf ./${dirname}`);
+    execSync(`rm ./${filename}`);
+  }
   console.log(`Copied MongoDB ${version} to '${__dirname}/${version}'`);
 };
-
-function getOS() {
-  const os = require('os');
-
-  switch (os.type()) {
-    case 'Linux': return 'linux';
-    case 'Darwin': return 'osx';
-    default: throw new Error(`Unrecognized os ${type}`);
-  }
-}
