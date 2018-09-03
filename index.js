@@ -14,6 +14,9 @@ const mongodb = require('mongodb');
 const prettyjson = require('prettyjson');
 const spawn = require('child_process').spawn;
 
+const ports = [27017, 27018, 27019];
+const isWin = process.platform === 'win32';
+
 commander.
   option('-v, --version [version]', 'Version to use').
   option('-k, --keep', 'Use this flag to skip clearing the database on startup').
@@ -31,34 +34,40 @@ function* run() {
   }
   const version = typeof commander.version === 'string' ?
     commander.version :
-    options.version || '3.6.5';
+    options.version || '3.6.6';
 
-  const mongod = `${__dirname}/${version}/mongod`;
-  const mongo = `${__dirname}/${version}/mongo`;
+  const mongod = `${__dirname}/${version}/mongod${isWin ? '.exe' : ''}`;
+  const mongo = `${__dirname}/${version}/mongo${isWin ? '.exe' : ''}`;
+
   if (!fs.existsSync(mongod)) {
     dl(version);
   }
 
-  execSync('mkdir -p ./data');
+  if (!fs.existsSync('./data')) {
+    execSync(isWin ? 'md .\\data' : 'mkdir -p ./data');
+  }
   if (commander.keep) {
     console.log(chalk.blue('Skipping purge'));
   } else {
     console.log(chalk.blue('Purging database...'));
-    execSync('rm -rf ./data/*');
+    execSync(isWin ? 'del /S /Q .\\data\\*' : 'rm -rf ./data/*');
   }
 
-  execSync('mkdir -p ./data/27017');
-  execSync('mkdir -p ./data/27018');
-  execSync('mkdir -p ./data/27019');
+  ports.forEach((port) => {
+    if(!fs.existsSync(`./data/${port}`)) {
+      execSync(isWin ? `md .\\data\\${port}` : `mkdir -p ./data/${port}`);
+    }
+  })
 
   console.log(`Running '${mongod}'`);
-  const rs = new ReplSet(mongod, [
-    { port: 27017, dbpath: `${process.cwd()}/data/27017` },
-    { port: 27018, dbpath: `${process.cwd()}/data/27018` },
-    { port: 27019, dbpath: `${process.cwd()}/data/27019` }
-  ].map(opts => ({
-    options: Object.assign(opts, { bind_ip: '127.0.0.1' })
-  })), { replSet: 'rs' });
+  const rs = new ReplSet(mongod,
+    ports.map(port => ({
+      options: {
+        port: port,
+        dbpath: `${process.cwd()}/data/${port}`,
+        bind_ip: '127.0.0.1'
+      }
+    })), { replSet: 'rs' });
 
   if (commander.keep) {
     console.log(chalk.blue('Restarting replica set...'));
@@ -84,13 +93,14 @@ function* run() {
     yield rs.start();
   }
 
-  console.log(chalk.green('Started replica set on "mongodb://localhost:27017,localhost:27018,localhost:27019?replicaSet=rs"'));
+  const hosts = ports.map(port => `localhost:${port}`);
+  console.log(chalk.green(`Started replica set on "mongodb://${hosts.join(',')}?replicaSet=rs"`));
 
   if (commander.shell) {
     console.log(chalk.blue(`Running mongo shell: ${mongo}`));
     spawn(mongo, ['--quiet'], { stdio: 'inherit' });
   } else if (!commander.quiet) {
-    const client = yield mongodb.MongoClient.connect('mongodb://localhost:27017/test', {
+    const client = yield mongodb.MongoClient.connect(`mongodb://${hosts[0]}/test`, {
       useNewUrlParser: true
     });
 
