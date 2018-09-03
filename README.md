@@ -32,7 +32,7 @@ run-rs --keep
 
 ## OS Support
 
-Run-rs supports Linux and OSX. Windows is **not** currently supported.
+Run-rs supports Linux, OSX, and Windows 10 (via [git bash](https://git-scm.com/downloads) or powershell).
 
 ## Shell Option
 
