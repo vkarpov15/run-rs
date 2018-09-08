@@ -22,6 +22,7 @@ commander.
   option('-k, --keep', 'Use this flag to skip clearing the database on startup').
   option('-s, --shell', 'Use this flag to automatically open up a MongoDB shell when the replica set is started').
   option('-q, --quiet', 'Use this flag to suppress any output after starting').
+  option('-m, --mongod', 'Skip downloading MongoDB and use this executable. If blank, just uses `mongod`. For instance, `run-rs --mongod` is equivalent to `run-rs --mongod mongod`').
   parse(process.argv);
 
 co(run).catch(error => console.error(error.stack));
@@ -36,11 +37,20 @@ function* run() {
     commander.version :
     options.version || '3.6.6';
 
-  const mongod = `${__dirname}/${version}/mongod${isWin ? '.exe' : ''}`;
-  const mongo = `${__dirname}/${version}/mongo${isWin ? '.exe' : ''}`;
+  let mongod;
+  let mongo;
+  if (commander.mongod) {
+    mongod = typeof commander.mongod === 'string' ? commander.mongod : 'mongod';
+    mongo = typeof commander.mongod === 'string' ?
+      commander.mongod.replace(/mongod$/i, 'mongo') :
+      'mongo';
+  } else {
+    mongod = `${__dirname}/${version}/mongod${isWin ? '.exe' : ''}`;
+    mongo = `${__dirname}/${version}/mongo${isWin ? '.exe' : ''}`;
 
-  if (!fs.existsSync(mongod)) {
-    dl(version);
+    if (!fs.existsSync(mongod)) {
+      dl(version);
+    }
   }
 
   if (!fs.existsSync('./data')) {
