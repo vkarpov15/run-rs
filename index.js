@@ -14,7 +14,7 @@ const mongodb = require('mongodb');
 const prettyjson = require('prettyjson');
 const spawn = require('child_process').spawn;
 
-const ports = [27017, 27018, 27019];
+let ports = [27017, 27018, 27019];
 const isWin = process.platform === 'win32';
 
 commander.
@@ -23,6 +23,7 @@ commander.
   option('-s, --shell', 'Use this flag to automatically open up a MongoDB shell when the replica set is started').
   option('-q, --quiet', 'Use this flag to suppress any output after starting').
   option('-m, --mongod', 'Skip downloading MongoDB and use this executable. If blank, just uses `mongod`. For instance, `run-rs --mongod` is equivalent to `run-rs --mongod mongod`').
+  option('-n, --number [num]', 'Number of mongods in the replica set. 3 by default.').
   parse(process.argv);
 
 co(run).catch(error => console.error(error.stack));
@@ -36,6 +37,14 @@ function* run() {
   const version = typeof commander.version === 'string' ?
     commander.version :
     options.version || '3.6.6';
+
+  if (commander.number != null) {
+    const n = parseInt(commander.number, 10);
+    ports = [];
+    for (let i = 0; i < n; ++i) {
+      ports.push(27017 + i);
+    }
+  }
 
   let mongod;
   let mongo;
