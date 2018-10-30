@@ -14,7 +14,7 @@ const mongodb = require('mongodb');
 const prettyjson = require('prettyjson');
 const spawn = require('child_process').spawn;
 
-let ports = [27017, 27018, 27019];
+let ports = [];
 const isWin = process.platform === 'win32';
 
 commander.
@@ -24,6 +24,7 @@ commander.
   option('-q, --quiet', 'Use this flag to suppress any output after starting').
   option('-m, --mongod', 'Skip downloading MongoDB and use this executable. If blank, just uses `mongod`. For instance, `run-rs --mongod` is equivalent to `run-rs --mongod mongod`').
   option('-n, --number [num]', 'Number of mongods in the replica set. 3 by default.').
+  option('-p, --portStart [num]', 'Start binding mongods contiguously from this port. The default is 27017').
   parse(process.argv);
 
 co(run).catch(error => console.error(error.stack));
@@ -38,12 +39,11 @@ function* run() {
     commander.version :
     options.version || '3.6.6';
 
-  if (commander.number != null) {
-    const n = parseInt(commander.number, 10);
-    ports = [];
-    for (let i = 0; i < n; ++i) {
-      ports.push(27017 + i);
-    }
+  const n = parseInt(commander.number, 10) || 3;
+  const startingPort = parseInt(commander.portStart, 10) || 27017;
+
+  for (let i = 0; i < n; ++i) {
+    ports.push(startingPort + i);
   }
 
   let mongod;
@@ -73,12 +73,12 @@ function* run() {
   }
 
   ports.forEach((port) => {
-    if(!fs.existsSync(`./data/${port}`)) {
+    if (!fs.existsSync(`./data/${port}`)) {
       execSync(isWin ? `md .\\data\\${port}` : `mkdir -p ./data/${port}`);
     }
-  })
+  });
 
-  console.log(`Running '${mongod}'`);
+  console.log(`Running '${mongod}'`, ports);
   const rs = new ReplSet(mongod,
     ports.map(port => ({
       options: {
@@ -162,4 +162,4 @@ function* run() {
       console.log(chalk.red(moment().format('YYYY-MM-DD HH:mm:ss')), chalk.red(`Oplog error: ${err.stack}`));
     });
   }
-};
+}
