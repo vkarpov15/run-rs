@@ -24,7 +24,7 @@ commander.
   option('-q, --quiet', 'Use this flag to suppress any output after starting').
   option('-m, --mongod', 'Skip downloading MongoDB and use this executable. If blank, just uses `mongod`. For instance, `run-rs --mongod` is equivalent to `run-rs --mongod mongod`').
   option('-n, --number [num]', 'Number of mongods in the replica set. 3 by default.').
-  option('-p, --portStart [num]', 'Start binding mongods contiguously from this port. The default is 27017').
+  option('-p, --portStart [num]', 'Start binding mongods contiguously from this port. 27017 by default.').
   parse(process.argv);
 
 co(run).catch(error => console.error(error.stack));
