@@ -53,6 +53,20 @@ rs:PRIMARY>
 
 Use `replicaSet=rs` in your connection string. 
 
+## Reusing a Pre-installed MongoDB Version
+
+By default, run-rs will download whatever version of MongoDB you've specified. If you already have MongoDB installed, you can use the `--mongod` option:
+
+```
+run-rs --mongod
+```
+
+The above command will just run whatever `mongod` is on your PATH. If you want to run a specific `mongod` server, you can do this:
+
+```
+run-rs --mongod /home/user/path/to/mongod
+```
+
 ## Running in Production
 
 Do **not** use run-rs for running your production database. Run-rs is designed
