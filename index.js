@@ -24,6 +24,7 @@ commander.
   option('-q, --quiet', 'Use this flag to suppress any output after starting').
   option('-m, --mongod', 'Skip downloading MongoDB and use this executable. If blank, just uses `mongod`. For instance, `run-rs --mongod` is equivalent to `run-rs --mongod mongod`').
   option('-n, --number [num]', 'Number of mongods in the replica set. 3 by default.').
+  option('-d, --dbPath [string]', 'Specify a path for mongod to use as a data directory. ${dbPath} by default.').
   parse(process.argv);
 
 co(run).catch(error => console.error(error.stack));
@@ -62,19 +63,21 @@ function* run() {
     }
   }
 
-  if (!fs.existsSync('./data')) {
-    execSync(isWin ? 'md .\\data' : 'mkdir -p ./data');
+  const dbPath = typeof commander.dbPath === 'string' ? `${commander.dbPath}` : './data';
+
+  if (!fs.existsSync(`${dbPath}`)) {
+    execSync(isWin ? `md .\\${dbPath}` : `mkdir -p ${dbPath}`);
   }
   if (commander.keep) {
     console.log(chalk.blue('Skipping purge'));
   } else {
     console.log(chalk.blue('Purging database...'));
-    execSync(isWin ? 'del /S /Q .\\data\\*' : 'rm -rf ./data/*');
+    execSync(isWin ? `del /S /Q .\\${dbPath}\\*` : `rm -rf ${dbPath}/*`);
   }
 
   ports.forEach((port) => {
-    if(!fs.existsSync(`./data/${port}`)) {
-      execSync(isWin ? `md .\\data\\${port}` : `mkdir -p ./data/${port}`);
+    if(!fs.existsSync(`${dbPath}/${port}`)) {
+      execSync(isWin ? `md .\\${dbPath}\\${port}` : `mkdir -p ${dbPath}/${port}`);
     }
   })
 
@@ -83,7 +86,7 @@ function* run() {
     ports.map(port => ({
       options: {
         port: port,
-        dbpath: `${process.cwd()}/data/${port}`,
+        dbpath: `${process.cwd()}/${dbPath}/${port}`,
         bind_ip: '127.0.0.1'
       }
     })), { replSet: 'rs' });
