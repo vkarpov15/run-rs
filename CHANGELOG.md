@@ -1,3 +1,8 @@
+0.3.0 / 2018-11-04
+==================
+ * feat: add --dbPath option to specify a path for run-rs to use as a data director #12 [fruschitaly](https://github.com/fruschitaly)
+ * feat: add the ability to specify the starting port #11 [lineus](https://github.com/lineus)
+
 0.2.2 / 2018-10-04
 ==================
  * feat: add -n, --number option to specify number of mongods to start #9
