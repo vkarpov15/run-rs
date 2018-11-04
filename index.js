@@ -25,7 +25,7 @@ commander.
   option('-m, --mongod', 'Skip downloading MongoDB and use this executable. If blank, just uses `mongod`. For instance, `run-rs --mongod` is equivalent to `run-rs --mongod mongod`').
   option('-n, --number [num]', 'Number of mongods in the replica set. 3 by default.').
   option('-p, --portStart [num]', 'Start binding mongods contiguously from this port. 27017 by default.').
-  option('-d, --dbPath [string]', 'Specify a path for mongod to use as a data directory. ${dbPath} by default.').
+  option('-d, --dbpath [string]', 'Specify a path for mongod to use as a data directory. `./data` by default.').
   parse(process.argv);
 
 co(run).catch(error => console.error(error.stack));
@@ -63,7 +63,7 @@ function* run() {
     }
   }
 
-  const dbPath = typeof commander.dbPath === 'string' ? `${commander.dbPath}` : './data';
+  const dbPath = typeof commander.dbpath === 'string' ? `${commander.dbpath}` : './data';
 
   if (!fs.existsSync(`${dbPath}`)) {
     execSync(isWin ? `md .\\${dbPath}` : `mkdir -p ${dbPath}`);
