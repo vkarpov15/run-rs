@@ -64,3 +64,5 @@ data
 package-lock.json
 3.*
 4.*
+
+.vscode
