@@ -67,6 +67,14 @@ The above command will just run whatever `mongod` is on your PATH. If you want t
 run-rs --mongod /home/user/path/to/mongod
 ```
 
+## Specify the data directory
+
+By default, run-rs will store data files in a directory named 'data'. To specify a dbPath for run-rs to use as a data directory, use the `--dbpath` option.
+
+```
+run-rs --dbPath /path/to/data/directory
+```
+
 ## Running in Production
 
 Do **not** use run-rs for running your production database. Run-rs is designed
