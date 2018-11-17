@@ -129,7 +129,7 @@ function* run() {
 
   if (commander.shell) {
     console.log(chalk.blue(`Running mongo shell: ${mongo}`));
-    let default_host = (hosts[0].split(':'))[0];
+    let shell_default_host = (hosts[0].split(':'))[0];
     let default_port = (hosts[0].split(':'))[1];
     spawn(mongo, 
       isWin ? ['--quiet','--port', default_port, '--host', default_host] : ['--quiet'], 
