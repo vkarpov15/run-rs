@@ -13,9 +13,11 @@ const moment = require('moment');
 const mongodb = require('mongodb');
 const prettyjson = require('prettyjson');
 const spawn = require('child_process').spawn;
+const os = require('os');
 
 let ports = [];
 const isWin = process.platform === 'win32';
+let hostname = os.hostname();
 
 commander.
   option('-v, --version [version]', 'Version to use').
@@ -32,7 +34,7 @@ co(run).catch(error => console.error(error.stack));
 
 function* run() {
   const options = {};
-  const rcfile = `${process.cwd()}/.run-rs.rc`;
+  const rcfile = isWin ? `${process.cwd()}\\.run-rs.rc` : `${process.cwd()}/.run-rs.rc`;
   if (fs.existsSync(rcfile)) {
     Object.assign(options, JSON.parse(fs.readFileSync(rcfile, 'utf8')));
   }
@@ -55,8 +57,8 @@ function* run() {
       commander.mongod.replace(/mongod$/i, 'mongo') :
       'mongo';
   } else {
-    mongod = `${__dirname}/${version}/mongod${isWin ? '.exe' : ''}`;
-    mongo = `${__dirname}/${version}/mongo${isWin ? '.exe' : ''}`;
+       mongod = isWin ? `${__dirname}\\${version}\\mongod.exe` : `${__dirname}/${version}/mongod`;
+       mongo = isWin ? `${__dirname}\\${version}\\mongo.exe` : `${__dirname}/${version}/mongo`;
 
     if (!fs.existsSync(mongod)) {
       dl(version);
@@ -82,7 +84,8 @@ function* run() {
   }
 
   ports.forEach((port) => {
-    if(!fs.existsSync(`${dbPath}/${port}`)) {
+    let portdbPath = isWin ? `${dbPath}\\${port}` : `${dbPath}/${port}`;
+    if(!fs.existsSync(portdbPath)) {
       execSync(isWin ? `md .\\${dbPath}\\${port}` : `mkdir -p ${dbPath}/${port}`);
     }
   });
@@ -92,11 +95,10 @@ function* run() {
     ports.map(port => ({
       options: {
         port: port,
-        dbpath: `${process.cwd()}/${dbPath}/${port}`,
-        bind_ip: '127.0.0.1'
+        dbpath: isWin ? `${process.cwd()}\\${dbPath}\\${port}` : `${process.cwd()}/${dbPath}/${port}`,
+        bind_ip: isWin ? hostname : '127.0.0.1'
       }
     })), { replSet: 'rs' });
-
   if (commander.keep) {
     console.log(chalk.blue('Restarting replica set...'));
     for (const manager of rs.managers) {
@@ -115,18 +117,24 @@ function* run() {
         yield manager.stop();
       }
       yield rs.start();
+      
     }
   } else {
     console.log(chalk.blue('Starting replica set...'));
     yield rs.start();
   }
 
-  const hosts = ports.map(port => `localhost:${port}`);
+  const hosts = ports.map(port => isWin ? `${hostname}:${port}` : `localhost:${port}`);
   console.log(chalk.green(`Started replica set on "mongodb://${hosts.join(',')}?replicaSet=rs"`));
 
   if (commander.shell) {
     console.log(chalk.blue(`Running mongo shell: ${mongo}`));
-    spawn(mongo, ['--quiet'], { stdio: 'inherit' });
+    let default_host = (hosts[0].split(':'))[0];
+    let default_port = (hosts[0].split(':'))[1];
+    spawn(mongo, 
+      isWin ? ['--quiet','--port', default_port, '--host', default_host] : ['--quiet'], 
+      { stdio: 'inherit' }
+    );
   } else if (!commander.quiet) {
     const client = yield mongodb.MongoClient.connect(`mongodb://${hosts[0]}/test`, {
       useNewUrlParser: true

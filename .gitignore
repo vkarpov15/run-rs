@@ -35,7 +35,6 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
-mongodb-win32*
 
 # TypeScript v1 declaration files
 typings/
