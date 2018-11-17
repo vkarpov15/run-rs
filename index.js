@@ -63,7 +63,13 @@ function* run() {
     }
   }
 
-  const dbPath = typeof commander.dbpath === 'string' ? `${commander.dbpath}` : './data';
+  let dbPath;
+  if(typeof commander.dbpath === 'string'){
+     dbPath = `${commander.dbpath}` ;
+  }
+  else {
+     dbPath = isWin ? 'data' : './data';
+  }
 
   if (!fs.existsSync(`${dbPath}`)) {
     execSync(isWin ? `md .\\${dbPath}` : `mkdir -p ${dbPath}`);
