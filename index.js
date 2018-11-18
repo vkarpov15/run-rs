@@ -17,7 +17,7 @@ const os = require('os');
 
 let ports = [];
 const isWin = process.platform === 'win32';
-let hostname = os.hostname();
+const hostname = os.hostname();
 
 commander.
   option('-v, --version [version]', 'Version to use').
