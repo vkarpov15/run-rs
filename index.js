@@ -85,7 +85,7 @@ function* run() {
 
   ports.forEach((port) => {
     let portDBPath = isWin ? `${dbPath}\\${port}` : `${dbPath}/${port}`;
-    if(!fs.existsSync(portdbPath)) {
+    if(!fs.existsSync(portDBPath)) {
       execSync(isWin ? `md .\\${dbPath}\\${port}` : `mkdir -p ${dbPath}/${port}`);
     }
   });
