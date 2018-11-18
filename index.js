@@ -57,8 +57,8 @@ function* run() {
       commander.mongod.replace(/mongod$/i, 'mongo') :
       'mongo';
   } else {
-       mongod = isWin ? `${__dirname}\\${version}\\mongod.exe` : `${__dirname}/${version}/mongod`;
-       mongo = isWin ? `${__dirname}\\${version}\\mongo.exe` : `${__dirname}/${version}/mongo`;
+      mongod = isWin ? `${__dirname}\\${version}\\mongod.exe` : `${__dirname}/${version}/mongod`;
+      mongo = isWin ? `${__dirname}\\${version}\\mongo.exe` : `${__dirname}/${version}/mongo`;
 
     if (!fs.existsSync(mongod)) {
       dl(version);
@@ -117,7 +117,6 @@ function* run() {
         yield manager.stop();
       }
       yield rs.start();
-      
     }
   } else {
     console.log(chalk.blue('Starting replica set...'));
