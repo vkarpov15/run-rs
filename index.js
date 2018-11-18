@@ -84,7 +84,7 @@ function* run() {
   }
 
   ports.forEach((port) => {
-    let portdbPath = isWin ? `${dbPath}\\${port}` : `${dbPath}/${port}`;
+    let portDBPath = isWin ? `${dbPath}\\${port}` : `${dbPath}/${port}`;
     if(!fs.existsSync(portdbPath)) {
       execSync(isWin ? `md .\\${dbPath}\\${port}` : `mkdir -p ${dbPath}/${port}`);
     }
@@ -128,10 +128,10 @@ function* run() {
 
   if (commander.shell) {
     console.log(chalk.blue(`Running mongo shell: ${mongo}`));
-    const shell_default_host = (hosts[0].split(':'))[0];
+    const shellDefaultHost = (hosts[0].split(':'))[0];
     const shell_default_port = (hosts[0].split(':'))[1];
     spawn(mongo, 
-      isWin ? ['--quiet','--port', shell_default_port, '--host', shell_default_host] : ['--quiet'], 
+      isWin ? ['--quiet','--port', shellDefaultPort, '--host', shellDefaultHost] : ['--quiet'], 
       { stdio: 'inherit' }
     );
   } else if (!commander.quiet) {
