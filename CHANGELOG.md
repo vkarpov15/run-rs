@@ -1,3 +1,7 @@
+0.3.2 / 2018-11-19
+==================
+ * fix: correct dbpaths and hostname on Windows #15 #8 [chaiwa-berian](https://github.com/chaiwa-berian)
+
 0.3.1 / 2018-11-17
 ==================
  * fix: correct default dbpath on Windows #14 #13 [chaiwa-berian](https://github.com/chaiwa-berian)
