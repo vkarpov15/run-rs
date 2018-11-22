@@ -1,3 +1,7 @@
+0.3.3 / 2018-11-22
+==================
+ * docs: notes on connection string to support Windows users #16 [chaiwa-berian](https://github.com/chaiwa-berian)
+
 0.3.2 / 2018-11-19
 ==================
  * fix: correct dbpaths and hostname on Windows #15 #8 [chaiwa-berian](https://github.com/chaiwa-berian)
