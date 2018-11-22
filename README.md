@@ -51,7 +51,14 @@ rs:PRIMARY>
 
 ## Notes on Connecting
 
-Use `replicaSet=rs` in your connection string. 
+Use `replicaSet=rs` in your connection string.
+
+**For Windows Users:** Do NOT use `localhost` or `127.0.0.1` for the host name in your connection string, use *computer name* instead. See example connection string below:
+
+```
+mongodb://sk-zm-los-bdb:27017,sk-zm-los-bdb:27018,sk-zm-los-bdb:27019/dbname?replicaSet=rs
+```
+*where* `sk-zm-los-bdb` is the *hostname* or the *name of your computer*, `dbname` is the name of your *database*, and *rs* is the name of your replica set.
 
 ## Reusing a Pre-installed MongoDB Version
 
