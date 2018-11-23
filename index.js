@@ -17,7 +17,7 @@ const os = require('os');
 
 let ports = [];
 const isWin = process.platform === 'win32';
-const hostname = os.hostname();
+let hostname = '';
 
 commander.
   option('-v, --version [version]', 'Version to use').
@@ -28,6 +28,7 @@ commander.
   option('-n, --number [num]', 'Number of mongods in the replica set. 3 by default.').
   option('-p, --portStart [num]', 'Start binding mongods contiguously from this port. 27017 by default.').
   option('-d, --dbpath [string]', 'Specify a path for mongod to use as a data directory. `./data` by default.').
+  option('-h, --host [string]', 'Override the default ip binding and bind mongodb to listen to other ip addresses. Bind to localhost or 127.0.0.1 by default').
   parse(process.argv);
 
 co(run).catch(error => console.error(error.stack));
@@ -48,7 +49,13 @@ function* run() {
   for (let i = 0; i < n; ++i) {
     ports.push(startingPort + i);
   }
-
+  
+  if(commander.host) {
+    hostname = `${commander.host}`;
+  }
+  else {
+    hostname = isWin ? os.hostname() : 'localhost';
+  }
   let mongod;
   let mongo;
   if (commander.mongod) {
@@ -96,9 +103,10 @@ function* run() {
       options: {
         port: port,
         dbpath: isWin ? `${process.cwd()}\\${dbPath}\\${port}` : `${process.cwd()}/${dbPath}/${port}`,
-        bind_ip: isWin ? hostname : '127.0.0.1'
+        bind_ip: hostname
       }
     })), { replSet: 'rs' });
+
   if (commander.keep) {
     console.log(chalk.blue('Restarting replica set...'));
     for (const manager of rs.managers) {
@@ -111,19 +119,19 @@ function* run() {
     if (result.set) {
       // There's already a replica set config, so don't initiate
       yield rs.waitForPrimary();
-    } else {
-      // First time starting up, need to create a replica set config
-      for (const manager of rs.managers) {
-        yield manager.stop();
+      } else {
+        // First time starting up, need to create a replica set config
+        for (const manager of rs.managers) {
+          yield manager.stop();
+        }
+        yield rs.start();
       }
-      yield rs.start();
-    }
   } else {
     console.log(chalk.blue('Starting replica set...'));
     yield rs.start();
   }
 
-  const hosts = ports.map(port => isWin ? `${hostname}:${port}` : `localhost:${port}`);
+  const hosts = ports.map(port => `${hostname}:${port}`);
   console.log(chalk.green(`Started replica set on "mongodb://${hosts.join(',')}?replicaSet=rs"`));
 
   if (commander.shell) {
