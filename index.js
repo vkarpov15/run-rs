@@ -49,7 +49,7 @@ function* run() {
   for (let i = 0; i < n; ++i) {
     ports.push(startingPort + i);
   }
-  
+
   if(commander.host) {
     hostname = `${commander.host}`;
   }
@@ -119,13 +119,13 @@ function* run() {
     if (result.set) {
       // There's already a replica set config, so don't initiate
       yield rs.waitForPrimary();
-      } else {
-        // First time starting up, need to create a replica set config
-        for (const manager of rs.managers) {
-          yield manager.stop();
-        }
-        yield rs.start();
+    } else {
+      // First time starting up, need to create a replica set config
+      for (const manager of rs.managers) {
+        yield manager.stop();
       }
+      yield rs.start();
+    }
   } else {
     console.log(chalk.blue('Starting replica set...'));
     yield rs.start();
@@ -138,8 +138,8 @@ function* run() {
     console.log(chalk.blue(`Running mongo shell: ${mongo}`));
     const shellDefaultHost = (hosts[0].split(':'))[0];
     const shellDefaultPort = (hosts[0].split(':'))[1];
-    spawn(mongo, 
-      isWin ? ['--quiet','--port', shellDefaultPort, '--host', shellDefaultHost] : ['--quiet'], 
+    spawn(mongo,
+      isWin ? ['--quiet','--port', shellDefaultPort, '--host', shellDefaultHost] : ['--quiet'],
       { stdio: 'inherit' }
     );
   } else if (!commander.quiet) {
