@@ -1,3 +1,7 @@
+0.4.0 / 2018-11-26
+==================
+ * feat: add --host option to override default mongodb ip binding #18 #16 [chaiwa-berian](https://github.com/chaiwa-berian)
+
 0.3.3 / 2018-11-22
 ==================
  * docs: notes on connection string to support Windows users #16 [chaiwa-berian](https://github.com/chaiwa-berian)
