@@ -82,6 +82,19 @@ By default, run-rs will store data files in a directory named 'data'. To specify
 run-rs --dbPath /path/to/data/directory
 ```
 
+## IP Binding
+
+Use the `--host` option to ensure that `run-rs` allows MongoDB to listen for connections on configured IP addresses or hostnames other than `localhost` and `127.0.0.1`. See examples below:
+
+```
+run-rs --host 198.51.100.1
+````
+**OR**
+```
+run-rs --host example-associated-hostname
+```
+**Note:** *Before you bind to other ip addresses, consider [enabling access control](https://docs.mongodb.com/manual/administration/security-checklist/#checklist-auth) and other security measures listed in [Security Checklist](https://docs.mongodb.com/manual/administration/security-checklist/) to prevent unauthorized access.*
+
 ## Running in Production
 
 Do **not** use run-rs for running your production database. Run-rs is designed
