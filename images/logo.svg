@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="250" viewBox="0 20 240 250">
+  <defs>
+    <style type="text/css">
+      @import url(https://fonts.googleapis.com/css?family=Gothic+A1);
+    </style>
+  </defs>
+  <style>
+    .txt { font: bold 90px 'Gothic A1'; }
+  </style>
+
+  <!-- Black bg -->
+  <rect x="0" y="0" stroke="#000000" width="240" height="250"/>
+
+  <!-- Green lines -->
+  <rect x="25" y="32.715" fill="#13aa52" stroke="#13aa52" stroke-width="1.034" width="175" height="18"/>
+  <rect x="25" y="212.715" fill="#13aa52" stroke="#13aa52" stroke-width="1.034" width="175" height="18"/>
+
+  <!-- Text -->
+  <text x="16" y="125px" class="txt" fill="#ffffff" textLength="188px">RUN</text>
+
+  <text x="16" y="205px" class="txt" fill="#ffffff" textLength="122px">RS</text>
+
+  <!-- Leaf -->
+  <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="143px" y="100px"
+	 width="60px" height="125px" viewBox="0 0 28 20" style="enable-background:new 0 0 28.75 28.749;"
+	 xml:space="preserve">
+    <g>
+	     <path d="M23.35,21.06c0,0,0.91,1.519,1.795,3.888c0.788,2.109,0.507,4.062-1.403,3.773c-1.877-0.284,0.721-2.213,0.096-3.773
+		c-0.909-2.275-2.152-3.279-2.291-3.259c-2.738,0.427-8.368,0.746-12.041-2.884C4.501,13.856,7.686,6.408,2.511,2.938
+		c8.417-5.459,18.256-2.616,21.906,2.867C27.901,11.034,25.56,17,24.171,19.658c0,0-6.703-10.578-10.002-11.544
+		C18.092,11.922,23.35,21.06,23.35,21.06z" fill="#13aa52"/>
+    </g>
+  </svg>
+</svg>
