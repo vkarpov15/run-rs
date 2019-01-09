@@ -2,6 +2,8 @@
 
 Zero-config MongoDB runner. Starts a replica set with no non-Node dependencies, not even MongoDB.
 
+<img src="https://raw.githubusercontent.com/vkarpov15/run-rs/master/images/logo.png">
+
 ## Usage
 
 To install:
