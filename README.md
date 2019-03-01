@@ -81,7 +81,7 @@ run-rs --mongod /home/user/path/to/mongod
 By default, run-rs will store data files in a directory named 'data'. To specify a dbPath for run-rs to use as a data directory, use the `--dbpath` option.
 
 ```
-run-rs --dbPath /path/to/data/directory
+run-rs --dbpath /path/to/data/directory
 ```
 
 ## IP Binding
