@@ -26,7 +26,7 @@ for (const o of options) {
 
 commander.parse(process.argv);
 
-co(run).catch(error => console.error(error.stack));
+co(run).catch(error => console.error(chalk.red(error.stack)));
 
 function* run() {
   const options = {};
@@ -119,11 +119,11 @@ function* run() {
       for (const manager of rs.managers) {
         yield manager.stop();
       }
-      yield rs.start();
+      yield startRS(rs);
     }
   } else {
     console.log(chalk.blue('Starting replica set...'));
-    yield rs.start();
+    yield startRS(rs);
   }
 
   const hosts = ports.map(port => `${hostname}:${port}`);
@@ -181,4 +181,20 @@ function* run() {
       console.log(chalk.red(moment().format('YYYY-MM-DD HH:mm:ss')), chalk.red(`Oplog error: ${err.stack}`));
     });
   }
+}
+
+function startRS(rs) {
+  return co(function*() {
+    try {
+      yield rs.start();
+    } catch (err) {
+      if (err.message.includes('SocketException: Address already in use')) {
+        const match = err.message.match(/port: (\d+)/);
+        if (match != null) {
+          throw new Error(`Could not start mongod on port ${match[1]} because it is already in use`);
+        }
+      }
+      throw err;
+    }
+  });
 }
