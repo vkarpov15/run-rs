@@ -11,6 +11,7 @@ const execSync = require('child_process').execSync;
 const fs = require('fs');
 const moment = require('moment');
 const mongodb = require('mongodb');
+const options = require('./src/options');
 const prettyjson = require('prettyjson');
 const spawn = require('child_process').spawn;
 const os = require('os');
@@ -19,17 +20,11 @@ let ports = [];
 const isWin = process.platform === 'win32';
 let hostname = '';
 
-commander.
-  option('-v, --version [version]', 'Version to use').
-  option('-k, --keep', 'Use this flag to skip clearing the database on startup').
-  option('-s, --shell', 'Use this flag to automatically open up a MongoDB shell when the replica set is started').
-  option('-q, --quiet', 'Use this flag to suppress any output after starting').
-  option('-m, --mongod', 'Skip downloading MongoDB and use this executable. If blank, just uses `mongod`. For instance, `run-rs --mongod` is equivalent to `run-rs --mongod mongod`').
-  option('-n, --number [num]', 'Number of mongods in the replica set. 3 by default.').
-  option('-p, --portStart [num]', 'Start binding mongods contiguously from this port. 27017 by default.').
-  option('-d, --dbpath [string]', 'Specify a path for mongod to use as a data directory. `./data` by default.').
-  option('-h, --host [string]', 'Override the default ip binding and bind mongodb to listen to other ip addresses. Bind to localhost or 127.0.0.1 by default').
-  parse(process.argv);
+for (const o of options) {
+  commander.option(o.option, o.description);
+}
+
+commander.parse(process.argv);
 
 co(run).catch(error => console.error(error.stack));
 
