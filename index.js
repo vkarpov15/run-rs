@@ -36,7 +36,7 @@ function* run() {
   }
   const version = typeof commander.version === 'string' ?
     commander.version :
-    options.version || '3.6.6';
+    options.version || '4.0.6';
 
   const n = parseInt(commander.number, 10) || 3;
   const startingPort = parseInt(commander.portStart, 10) || 27017;
