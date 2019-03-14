@@ -1,3 +1,11 @@
+0.5.0 / 2019-03-13
+==================
+ * BREAKING CHANGE: use MongoDB 4.0.6 by default
+ * fix: clean error message when address is already in use #21
+ * fix: print readable error if --mongod not found #25
+ * fix: use custom --help to avoid limitations in commanders help output #24
+ * docs: from `--dbPath` to `--dbpath` #23 [isghe](https://github.com/isghe)
+
 0.4.0 / 2018-11-26
 ==================
  * feat: add --host option to override default mongodb ip binding #18 #16 [chaiwa-berian](https://github.com/chaiwa-berian)
