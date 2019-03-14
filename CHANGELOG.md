@@ -1,3 +1,7 @@
+0.5.1 / 2019-03-14
+==================
+ * fix: support absolute paths as args to --dbpath #26 [fiorillo](https://github.com/fiorillo)
+
 0.5.0 / 2019-03-13
 ==================
  * BREAKING CHANGE: use MongoDB 4.0.6 by default
