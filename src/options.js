@@ -15,7 +15,7 @@ module.exports = Object.freeze([
     description: 'Use this flag to suppress any output after starting'
   },
   {
-    option: '-m, --mongod',
+    option: '-m, --mongod [string]',
     description: 'Skip downloading MongoDB and use this executable. If blank, just uses `mongod`. For instance, `run-rs --mongod` is equivalent to `run-rs --mongod mongod`'
   },
   {

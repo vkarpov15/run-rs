@@ -65,8 +65,12 @@ function* run() {
     mongo = typeof commander.mongod === 'string' ?
       commander.mongod.replace(/mongod$/i, 'mongo') :
       'mongo';
-    if (!fs.existsSync(mongod)) {
-      throw new Error(`No mongod process found at ${path.join(process.cwd(), 'mongod')}, check your --mongod option`);
+
+    try {
+      let where = isWin ? 'where' : 'command -v';
+      execSync(`${where} ${mongod}`);
+    } catch (err) {
+      throw new Error(`No mongod process found at ${mongod}, check your --mongod option`, err);
     }
   } else {
     mongod = isWin ? `${__dirname}\\${version}\\mongod.exe` : `${__dirname}/${version}/mongod`;
@@ -82,23 +86,23 @@ function* run() {
      dbPath = `${commander.dbpath}` ;
   }
   else {
-     dbPath = isWin ? 'data' : './data';
+     dbPath = isWin ? `${process.cwd()}\\${data}` : `${process.cwd()}/data`;
   }
 
   if (!fs.existsSync(`${dbPath}`)) {
-    execSync(isWin ? `md .\\${dbPath}` : `mkdir -p ${dbPath}`);
+    execSync(isWin ? `md ${dbPath}` : `mkdir -p ${dbPath}`);
   }
   if (commander.keep) {
     console.log(chalk.blue('Skipping purge'));
   } else {
     console.log(chalk.blue('Purging database...'));
-    execSync(isWin ? `del /S /Q .\\${dbPath}\\*` : `rm -rf ${dbPath}/*`);
+    execSync(isWin ? `del /S /Q ${dbPath}\\*` : `rm -rf ${dbPath}/*`);
   }
 
   ports.forEach((port) => {
     let portDBPath = isWin ? `${dbPath}\\${port}` : `${dbPath}/${port}`;
     if(!fs.existsSync(portDBPath)) {
-      execSync(isWin ? `md .\\${dbPath}\\${port}` : `mkdir -p ${dbPath}/${port}`);
+      execSync(isWin ? `md ${dbPath}\\${port}` : `mkdir -p ${dbPath}/${port}`);
     }
   });
 
@@ -107,7 +111,7 @@ function* run() {
     ports.map(port => ({
       options: {
         port: port,
-        dbpath: isWin ? `${process.cwd()}\\${dbPath}\\${port}` : `${process.cwd()}/${dbPath}/${port}`,
+        dbpath: isWin ? `${dbPath}\\${port}` : `${dbPath}/${port}`,
         bind_ip: hostname
       }
     })), { replSet: 'rs' });
