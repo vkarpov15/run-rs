@@ -13,6 +13,7 @@ const moment = require('moment');
 const mongodb = require('mongodb');
 const options = require('./src/options');
 const prettyjson = require('prettyjson');
+const printHelp = require('./src/printHelp');
 const spawn = require('child_process').spawn;
 const os = require('os');
 
@@ -29,6 +30,11 @@ commander.parse(process.argv);
 co(run).catch(error => console.error(chalk.red(error.stack)));
 
 function* run() {
+  if ('help' in commander) {
+    printHelp();
+    return;
+  }
+
   const options = {};
   const rcfile = isWin ? `${process.cwd()}\\.run-rs.rc` : `${process.cwd()}/.run-rs.rc`;
   if (fs.existsSync(rcfile)) {

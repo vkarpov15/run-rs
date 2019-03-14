@@ -33,5 +33,9 @@ module.exports = Object.freeze([
   {
     option: '-h, --host [string]',
     description: 'Override the default ip binding and bind mongodb to listen to other ip addresses. Bind to localhost or 127.0.0.1 by default'
+  },
+  {
+    option: '--help',
+    description: 'Output help'
   }
 ]);
