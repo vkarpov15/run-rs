@@ -12,6 +12,7 @@ const fs = require('fs');
 const moment = require('moment');
 const mongodb = require('mongodb');
 const options = require('./src/options');
+const path = require('path');
 const prettyjson = require('prettyjson');
 const printHelp = require('./src/printHelp');
 const spawn = require('child_process').spawn;
@@ -30,7 +31,7 @@ commander.parse(process.argv);
 co(run).catch(error => console.error(chalk.red(error.stack)));
 
 function* run() {
-  if ('help' in commander) {
+  if ('--help' in commander.rawArgs) {
     printHelp();
     return;
   }
@@ -64,6 +65,9 @@ function* run() {
     mongo = typeof commander.mongod === 'string' ?
       commander.mongod.replace(/mongod$/i, 'mongo') :
       'mongo';
+    if (!fs.existsSync(mongod)) {
+      throw new Error(`No mongod process found at ${path.join(process.cwd(), 'mongod')}, check your --mongod option`);
+    }
   } else {
     mongod = isWin ? `${__dirname}\\${version}\\mongod.exe` : `${__dirname}/${version}/mongod`;
     mongo = isWin ? `${__dirname}\\${version}\\mongo.exe` : `${__dirname}/${version}/mongo`;
