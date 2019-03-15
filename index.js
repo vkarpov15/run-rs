@@ -86,7 +86,7 @@ function* run() {
      dbPath = `${commander.dbpath}` ;
   }
   else {
-     dbPath = isWin ? `${process.cwd()}\\${data}` : `${process.cwd()}/data`;
+     dbPath = isWin ? `${process.cwd()}\\data` : `${process.cwd()}/data`;
   }
 
   if (!fs.existsSync(`${dbPath}`)) {
