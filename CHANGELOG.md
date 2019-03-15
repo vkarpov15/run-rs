@@ -1,3 +1,7 @@
+0.5.2 / 2019-03-14
+==================
+ * fix: correct dbPath on windows #26
+
 0.5.1 / 2019-03-14
 ==================
  * fix: support absolute paths as args to --dbpath #26 [fiorillo](https://github.com/fiorillo)
