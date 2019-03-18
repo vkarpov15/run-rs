@@ -1,9 +1,12 @@
 'use strict';
 
 const execSync = require('child_process').execSync;
-module.exports = function dl(version = '3.6.6') {
+
+module.exports = function download(version) {
   const versionMatch = version.match(/^(\d)\.(\d)\.(\d+)$/);
-  if (!versionMatch) throw new Error('Version must be in x.x.x format');
+  if (!versionMatch) {
+    throw new Error('Version must be in x.x.x format');
+  }
   const major = parseInt(versionMatch[1]);
   // const minor = parseInt(versionMatch[2]);
   // const patch = parseInt(versionMatch[3]);
@@ -35,7 +38,6 @@ module.exports = function dl(version = '3.6.6') {
       throw new Error(`Unrecognized os ${os}`);
   }
 
-  console.log(`Downloading MongoDB ${version}`);
   if (os === 'win32') {
     execSync('powershell.exe -nologo -noprofile -command "&{' +
       'Add-Type -AssemblyName System.IO.Compression.FileSystem;' +
@@ -53,5 +55,6 @@ module.exports = function dl(version = '3.6.6') {
     execSync(`rm -rf ./${dirname}`);
     execSync(`rm ./${filename}`);
   }
-  console.log(`Copied MongoDB ${version} to '${__dirname}/${version}'`);
+
+  return { path: `${__dirname}/${version}` };
 };

@@ -6,7 +6,7 @@ const ReplSet = require('mongodb-topology-manager').ReplSet;
 const chalk = require('chalk');
 const co = require('co');
 const commander = require('commander');
-const dl = require('./dl');
+const download = require('./src/download');
 const execSync = require('child_process').execSync;
 const fs = require('fs');
 const moment = require('moment');
@@ -76,7 +76,9 @@ function* run() {
     mongo = isWin ? `${__dirname}\\${version}\\mongo.exe` : `${__dirname}/${version}/mongo`;
 
     if (!fs.existsSync(mongod)) {
-      dl(version);
+      console.log(`Downloading MongoDB ${version}`);
+      const path = download(version).path;
+      console.log(`Copied MongoDB ${version} to '${path}'`);
     }
   }
 
