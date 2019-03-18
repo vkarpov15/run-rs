@@ -12,13 +12,12 @@ const fs = require('fs');
 const moment = require('moment');
 const mongodb = require('mongodb');
 const options = require('./src/options');
-const path = require('path');
 const prettyjson = require('prettyjson');
 const printHelp = require('./src/printHelp');
 const spawn = require('child_process').spawn;
 const os = require('os');
 
-let ports = [];
+const ports = [];
 const isWin = process.platform === 'win32';
 let hostname = '';
 
@@ -52,7 +51,7 @@ function* run() {
     ports.push(startingPort + i);
   }
 
-  if(commander.host) {
+  if (commander.host) {
     hostname = `${commander.host}`;
   }
   else {
@@ -67,7 +66,7 @@ function* run() {
       'mongo';
 
     try {
-      let where = isWin ? 'where' : 'command -v';
+      const where = isWin ? 'where' : 'command -v';
       execSync(`${where} ${mongod}`);
     } catch (err) {
       throw new Error(`No mongod process found at ${mongod}, check your --mongod option`, err);
@@ -82,11 +81,11 @@ function* run() {
   }
 
   let dbPath;
-  if(typeof commander.dbpath === 'string'){
-     dbPath = `${commander.dbpath}` ;
+  if (typeof commander.dbpath === 'string') {
+    dbPath = `${commander.dbpath}` ;
   }
   else {
-     dbPath = isWin ? `${process.cwd()}\\data` : `${process.cwd()}/data`;
+    dbPath = isWin ? `${process.cwd()}\\data` : `${process.cwd()}/data`;
   }
 
   if (!fs.existsSync(`${dbPath}`)) {
@@ -100,8 +99,8 @@ function* run() {
   }
 
   ports.forEach((port) => {
-    let portDBPath = isWin ? `${dbPath}\\${port}` : `${dbPath}/${port}`;
-    if(!fs.existsSync(portDBPath)) {
+    const portDBPath = isWin ? `${dbPath}\\${port}` : `${dbPath}/${port}`;
+    if (!fs.existsSync(portDBPath)) {
       execSync(isWin ? `md ${dbPath}\\${port}` : `mkdir -p ${dbPath}/${port}`);
     }
   });

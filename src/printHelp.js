@@ -19,7 +19,7 @@ function stringifyOptions() {
 }
 
 function padEnd(str, len) {
-  while(str.length < len) {
+  while (str.length < len) {
     str = str + ' ';
   }
   return str;

@@ -6,7 +6,9 @@
   "bin": {
     "run-rs": "./index.js"
   },
-  "scripts": {},
+  "scripts": {
+    "lint": "eslint ."
+  },
   "author": "Valeri Karpov <val@karpov.io>",
   "license": "Apache 2.0",
   "keywords": [
@@ -28,5 +30,65 @@
     "mongodb-topology-manager": "2.x",
     "prettyjson": "1.2.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint": "5.3.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2015
+    },
+    "env": {
+      "node": true,
+      "es6": true
+    },
+    "rules": {
+      "comma-style": "error",
+      "consistent-this": [
+        "error",
+        "_this"
+      ],
+      "indent": [
+        "error",
+        2,
+        {
+          "SwitchCase": 1,
+          "VariableDeclarator": 2
+        }
+      ],
+      "keyword-spacing": "error",
+      "no-buffer-constructor": "warn",
+      "no-console": "off",
+      "no-multi-spaces": "error",
+      "func-call-spacing": "error",
+      "no-trailing-spaces": "error",
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "semi": "error",
+      "space-before-blocks": "error",
+      "space-before-function-paren": [
+        "error",
+        "never"
+      ],
+      "space-infix-ops": "error",
+      "space-unary-ops": "error",
+      "no-var": "warn",
+      "prefer-const": "warn",
+      "strict": [
+        "error",
+        "global"
+      ],
+      "no-restricted-globals": [
+        "error",
+        {
+          "name": "context",
+          "message": "Don't use Mocha's global context"
+        }
+      ]
+    }
+  }
 }

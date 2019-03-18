@@ -5,20 +5,20 @@ module.exports = function dl(version = '3.6.6') {
   const versionMatch = version.match(/^(\d)\.(\d)\.(\d+)$/);
   if (!versionMatch) throw new Error('Version must be in x.x.x format');
   const major = parseInt(versionMatch[1]);
-  const minor = parseInt(versionMatch[2]);
-  const patch = parseInt(versionMatch[3]);
+  // const minor = parseInt(versionMatch[2]);
+  // const patch = parseInt(versionMatch[3]);
 
   let os = process.platform;
   let dirname;
   let filename;
 
-  switch(os) {
+  switch (os) {
     case 'linux':
-      filename = `mongodb-linux-x86_64-${version}.tgz`
+      filename = `mongodb-linux-x86_64-${version}.tgz`;
       dirname = `mongodb-linux-x86_64-${version}`;
       break;
     case 'darwin':
-      os = 'osx'
+      os = 'osx';
       filename = `mongodb-osx-ssl-x86_64-${version}.tgz`;
       dirname = `mongodb-osx-x86_64-${version}`;
       break;
@@ -37,14 +37,14 @@ module.exports = function dl(version = '3.6.6') {
 
   console.log(`Downloading MongoDB ${version}`);
   if (os === 'win32') {
-    execSync(`powershell.exe -nologo -noprofile -command "&{` + 
-      `Add-Type -AssemblyName System.IO.Compression.FileSystem;` +
+    execSync('powershell.exe -nologo -noprofile -command "&{' +
+      'Add-Type -AssemblyName System.IO.Compression.FileSystem;' +
       `(New-Object Net.WebClient).DownloadFile('http://downloads.mongodb.org/${os}/${filename}', '${filename}');` +
       `[System.IO.Compression.ZipFile]::ExtractToDirectory('${filename}','.');` +
       `mv './${dirname}/bin' '${__dirname}/${version}';` +
       `rd -r './${dirname}';` +
       `rm './${filename}';` +
-      `}"`
+      '}"'
     );
   } else {
     execSync(`curl -OL http://downloads.mongodb.org/${os}/${filename}`);
