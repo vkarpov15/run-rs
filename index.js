@@ -30,7 +30,7 @@ commander.parse(process.argv);
 co(run).catch(error => console.error(chalk.red(error.stack)));
 
 function* run() {
-  if ('--help' in commander.rawArgs) {
+  if (commander.rawArgs.indexOf('--help') > 0) {
     printHelp();
     return;
   }
