@@ -1,3 +1,7 @@
+0.5.3 / 2019-09-11
+==================
+ * fix: make --help check more robust #32 [jordonbiondo](https://github.com/jordonbiondo)
+
 0.5.2 / 2019-03-14
 ==================
  * fix: correct dbPath on windows #26
