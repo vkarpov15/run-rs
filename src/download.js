@@ -1,5 +1,7 @@
 'use strict';
 
+const path = require('path');
+
 const execSync = require('child_process').execSync;
 
 module.exports = function download(version) {
@@ -14,6 +16,7 @@ module.exports = function download(version) {
   let os = process.platform;
   let dirname;
   let filename;
+  const mainScriptDir = path.resolve(__dirname, '..');
 
   switch (os) {
     case 'linux':
@@ -43,7 +46,7 @@ module.exports = function download(version) {
       'Add-Type -AssemblyName System.IO.Compression.FileSystem;' +
       `(New-Object Net.WebClient).DownloadFile('http://downloads.mongodb.org/${os}/${filename}', '${filename}');` +
       `[System.IO.Compression.ZipFile]::ExtractToDirectory('${filename}','.');` +
-      `mv './${dirname}/bin' '${__dirname}/${version}';` +
+      `mv './${dirname}/bin' '${mainScriptDir}/${version}';` +
       `rd -r './${dirname}';` +
       `rm './${filename}';` +
       '}"'
@@ -51,10 +54,10 @@ module.exports = function download(version) {
   } else {
     execSync(`curl -OL http://downloads.mongodb.org/${os}/${filename}`);
     execSync(`tar -zxvf ${filename}`);
-    execSync(`mv ./${dirname}/bin ${__dirname}/${version}`);
+    execSync(`mv ./${dirname}/bin ${mainScriptDir}/${version}`);
     execSync(`rm -rf ./${dirname}`);
     execSync(`rm ./${filename}`);
   }
 
-  return { path: `${__dirname}/${version}` };
+  return { path: `${mainScriptDir}/${version}` };
 };
