@@ -1,3 +1,7 @@
+0.5.4 / 2019-09-14
+==================
+ * fix: correct download path #38 #37 [ProtonGustave](https://github.com/ProtonGustave)
+
 0.5.3 / 2019-09-11
 ==================
  * fix: make --help check more robust #32 [jordonbiondo](https://github.com/jordonbiondo)
