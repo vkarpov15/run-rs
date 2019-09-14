@@ -1,3 +1,7 @@
+0.5.5 / 2019-09-14
+==================
+ * fix: use mongodb driver 3.3.x for MongoDB 4.2 support
+
 0.5.4 / 2019-09-14
 ==================
  * fix: correct download path #38 #37 [ProtonGustave](https://github.com/ProtonGustave)
