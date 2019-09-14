@@ -154,7 +154,8 @@ function* run() {
     );
   } else if (!commander.quiet) {
     const client = yield mongodb.MongoClient.connect(`mongodb://${hosts[0]}/test`, {
-      useNewUrlParser: true
+      useNewUrlParser: true,
+      useUnifiedTopology: true
     });
 
     const oplog = client.db('local').collection('oplog.rs').find({ ts: { $gte: new mongodb.Timestamp() } }, {
