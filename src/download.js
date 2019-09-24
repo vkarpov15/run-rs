@@ -1,10 +1,10 @@
 'use strict';
 
+const childProcess = require('child_process');
 const path = require('path');
 
-const execSync = require('child_process').execSync;
-
-module.exports = function download(version, systemLinux) {
+module.exports = function download(version, systemLinux, os) {
+  const execSync = childProcess.execSync;
   const versionMatch = version.match(/^(\d)\.(\d)\.(\d+)$/);
   if (!versionMatch) {
     throw new Error('Version must be in x.x.x format');
@@ -13,7 +13,7 @@ module.exports = function download(version, systemLinux) {
   const minor = parseInt(versionMatch[2]);
   // const patch = parseInt(versionMatch[3]);
 
-  let os = process.platform;
+  os = os || process.platform;
   let dirname;
   let filename;
   let base = 'http://downloads.mongodb.org';
@@ -57,10 +57,12 @@ module.exports = function download(version, systemLinux) {
       throw new Error(`Unrecognized os ${os}`);
   }
 
+  const url = `${base}/${os}/${filename}`;
+
   if (os === 'win32') {
     execSync('powershell.exe -nologo -noprofile -command "&{' +
       'Add-Type -AssemblyName System.IO.Compression.FileSystem;' +
-      `(New-Object Net.WebClient).DownloadFile('${base}/${os}/${filename}', '${filename}');` +
+      `(New-Object Net.WebClient).DownloadFile('${url}', '${filename}');` +
       `[System.IO.Compression.ZipFile]::ExtractToDirectory('${filename}','.');` +
       `mv './${dirname}/bin' '${mainScriptDir}/${version}';` +
       `rd -r './${dirname}';` +
@@ -68,12 +70,12 @@ module.exports = function download(version, systemLinux) {
       '}"'
     );
   } else {
-    execSync(`curl -OL ${base}/${os}/${filename}`);
+    execSync(`curl -OL ${url}`);
     execSync(`tar -zxvf ${filename}`);
     execSync(`mv ./${dirname}/bin ${mainScriptDir}/${version}`);
     execSync(`rm -rf ./${dirname}`);
     execSync(`rm ./${filename}`);
   }
 
-  return { path: `${mainScriptDir}/${version}` };
+  return { path: `${mainScriptDir}/${version}`, url: url };
 };
