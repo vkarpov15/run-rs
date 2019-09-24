@@ -24,6 +24,12 @@ To use a different version, use the `-v` flag. For example, this will start a 3 
 run-rs -v 4.0.0
 ```
 
+On linux, for 4.2.0 version, by default download `ubuntu1604`, change with command
+
+```
+run-rs -l ubuntu1804
+```
+
 ## Clearing the Database
 
 Run-rs clears the database every time it starts by default. To override this behavior, use the `--keep` (`-k`) flag.

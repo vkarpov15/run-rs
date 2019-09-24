@@ -35,6 +35,10 @@ module.exports = Object.freeze([
     description: 'Override the default ip binding and bind mongodb to listen to other ip addresses. Bind to localhost or 127.0.0.1 by default'
   },
   {
+    option: '-l, --linux [string]',
+    description: 'Override the default system linux. Only for linux version. `ubuntu1604` by default'
+  },
+  {
     option: '--help',
     description: 'Output help'
   }

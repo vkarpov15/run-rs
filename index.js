@@ -42,7 +42,7 @@ function* run() {
   }
   const version = typeof commander.version === 'string' ?
     commander.version :
-    options.version || '4.0.6';
+    options.version || '4.0.12';
 
   const n = parseInt(commander.number, 10) || 3;
   const startingPort = parseInt(commander.portStart, 10) || 27017;
@@ -77,7 +77,7 @@ function* run() {
 
     if (!fs.existsSync(mongod)) {
       console.log(`Downloading MongoDB ${version}`);
-      const path = download(version).path;
+      const path = download(version, commander.linux || 'ubuntu1604').path;
       console.log(`Copied MongoDB ${version} to '${path}'`);
     }
   }
