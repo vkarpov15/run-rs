@@ -1,3 +1,8 @@
+0.6.0 / 2019-09-24
+==================
+ * feat: support MongoDB 4.2 on Linux #40 [gabrie-allaigre](https://github.com/gabrie-allaigre)
+ * feat: add `-l, --linux` flag for specifying Linux distro, `ubuntu1604` by default #40 [gabrie-allaigre](https://github.com/gabrie-allaigre)
+
 0.5.5 / 2019-09-14
 ==================
  * fix: use mongodb driver 3.3.x for MongoDB 4.2 support
