@@ -32,7 +32,7 @@ module.exports = function download(version, systemLinux, os) {
       break;
     case 'darwin':
       os = 'osx';
-      if (major <= 4 && minor < 2) {
+      if (major <= 4 || minor < 2) {
         filename = `mongodb-osx-ssl-x86_64-${version}.tgz`;
         dirname = `mongodb-osx-x86_64-${version}`;
       } else {
