@@ -1,3 +1,7 @@
+0.6.1 / 2019-09-27
+==================
+ * fix: fix OSX download URL for 3.2, 3.4, 3.6
+
 0.6.0 / 2019-09-24
 ==================
  * feat: support MongoDB 4.2 on Linux #40 [gabrie-allaigre](https://github.com/gabrie-allaigre)
