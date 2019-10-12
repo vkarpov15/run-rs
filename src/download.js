@@ -19,10 +19,11 @@ module.exports = function download(version, systemLinux, os) {
   let base = 'http://downloads.mongodb.org';
 
   const mainScriptDir = path.resolve(__dirname, '..');
+  const isBefore42 = major < 4 || (major === 4 && minor < 2);
 
   switch (os) {
     case 'linux':
-      if (major <= 4 && minor < 2) {
+      if (isBefore42) {
         filename = `mongodb-linux-x86_64-${version}.tgz`;
         dirname = `mongodb-linux-x86_64-${version}`;
       } else {
@@ -32,7 +33,7 @@ module.exports = function download(version, systemLinux, os) {
       break;
     case 'darwin':
       os = 'osx';
-      if (major <= 4 || minor < 2) {
+      if (isBefore42) {
         filename = `mongodb-osx-ssl-x86_64-${version}.tgz`;
         dirname = `mongodb-osx-x86_64-${version}`;
       } else {

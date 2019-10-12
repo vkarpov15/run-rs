@@ -22,4 +22,9 @@ describe('download', function() {
     ({ url } = download('4.2.0', 'ubuntu1604', 'linux'));
     assert.equal(url, 'http://downloads.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-4.2.0.tgz');
   });
+
+  it('osx 4.2.0', function() {
+    let { url } = download('4.2.0', null, 'darwin');
+    assert.equal(url, 'https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-4.2.0.tgz');
+  });
 });
