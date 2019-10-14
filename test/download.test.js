@@ -27,4 +27,9 @@ describe('download', function() {
     let { url } = download('4.2.0', null, 'darwin');
     assert.equal(url, 'https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-4.2.0.tgz');
   });
+
+  it('osx < 4.2.0', function() {
+    let { url } = download('4.0.6', null, 'darwin');
+    assert.equal(url, 'http://downloads.mongodb.org/osx/mongodb-osx-ssl-x86_64-4.0.6.tgz');
+  });
 });
