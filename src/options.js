@@ -39,6 +39,10 @@ module.exports = Object.freeze([
     description: 'Override the default system linux. Only for linux version. `ubuntu1604` by default'
   },
   {
+    option: '-p, --bind_ip_all',
+    description: 'Allow connections from remote servers, not just from localhost.'
+  },
+  {
     option: '--help',
     description: 'Output help'
   }

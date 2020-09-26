@@ -109,13 +109,17 @@ function* run() {
 
   console.log(`Running '${mongod}'`, ports);
   const rs = new ReplSet(mongod,
-    ports.map(port => ({
-      options: {
+    ports.map(port => {
+      const options = {
         port: port,
         dbpath: isWin ? `${dbPath}\\${port}` : `${dbPath}/${port}`,
         bind_ip: hostname
+      };
+      if (commander.bind_ip_all) {
+        options.bind_ip_all = null;
       }
-    })), { replSet: 'rs' });
+      return options;
+    }), { replSet: 'rs' });
 
   if (commander.keep) {
     console.log(chalk.blue('Restarting replica set...'));
