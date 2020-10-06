@@ -118,7 +118,7 @@ function* run() {
       if (commander.bind_ip_all) {
         options.bind_ip_all = null;
       }
-      return options;
+      return {options: options};
     }), { replSet: 'rs' });
 
   if (commander.keep) {
@@ -208,6 +208,7 @@ function startRS(rs) {
     try {
       yield rs.start();
     } catch (err) {
+      err = err[0];
       if (err.message.includes('SocketException: Address already in use')) {
         const match = err.message.match(/port: (\d+)/);
         if (match != null) {
