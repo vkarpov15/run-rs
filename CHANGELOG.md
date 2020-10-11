@@ -1,3 +1,7 @@
+0.7.1 / 2020-10-11
+==================
+ * fix: correctly return options when creating replica set #50
+
 0.6.2 / 2019-10-12
 ==================
  * fix: correct OSX download URL for 4.2
