@@ -118,7 +118,7 @@ function* run() {
       if (commander.bind_ip_all) {
         options.bind_ip_all = null;
       }
-      return options;
+      return { options };
     }), { replSet: 'rs' });
 
   if (commander.keep) {
