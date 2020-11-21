@@ -1,3 +1,7 @@
+0.7.2 / 2020-11-21
+==================
+ * fix: work around log message change for MongoDB 4.4 #53
+
 0.7.1 / 2020-10-11
 ==================
  * fix: correctly return options when creating replica set #50
