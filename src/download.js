@@ -16,7 +16,7 @@ module.exports = function download(version, systemLinux, os) {
   os = os || process.platform;
   let dirname;
   let filename;
-  let base = 'http://downloads.mongodb.org';
+  let base = 'https://downloads.mongodb.org';
 
   const mainScriptDir = path.resolve(__dirname, '..');
   const isBefore42 = major < 4 || (major === 4 && minor < 2);
