@@ -1,3 +1,8 @@
+0.7.3 / 2020-11-27
+==================
+ * fix: use https to download mongodb #55 [Xaseron](https://github.com/Xaseron)
+ * fix: fixed cannot read property undefined in accessing message property #48 [ucejtech](https://github.com/ucejtech)
+
 0.7.2 / 2020-11-21
 ==================
  * fix: work around log message change for MongoDB 4.4 #53
