@@ -210,6 +210,9 @@ function startRS(rs) {
     try {
       yield rs.start();
     } catch (err) {
+      if (Array.isArray(err)) {
+        err = err[0]; 
+      }
       if (err.message.includes('SocketException: Address already in use')) {
         const match = err.message.match(/port: (\d+)/);
         if (match != null) {
