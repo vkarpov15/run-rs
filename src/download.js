@@ -49,9 +49,13 @@ module.exports = function download(version, systemLinux, os) {
       } else if (major <= 4 && minor < 2) {
         filename = `mongodb-win32-x86_64-2008plus-ssl-${version}.zip`;
         dirname = `mongodb-win32-x86_64-2008plus-ssl-${version}`;
-      } else {
+      } else if (major <= 4 && minor < 4) {
         filename = `mongodb-win32-x86_64-2012plus-${version}.zip`;
         dirname = `mongodb-win32-x86_64-2012plus-${version}`;
+      } else {
+        os = 'windows';
+        filename = `mongodb-windows-x86_64-${version}.zip`;
+        dirname = `mongodb-win32-x86_64-windows-${version}`;
       }
       break;
     default:
@@ -60,7 +64,8 @@ module.exports = function download(version, systemLinux, os) {
 
   const url = `${base}/${os}/${filename}`;
 
-  if (os === 'win32') {
+  if (os.startsWith('win')) {
+    console.log(url)
     execSync('powershell.exe -nologo -noprofile -command "&{' +
       'Add-Type -AssemblyName System.IO.Compression.FileSystem;' +
       `(New-Object Net.WebClient).DownloadFile('${url}', '${filename}');` +
