@@ -65,7 +65,6 @@ module.exports = function download(version, systemLinux, os) {
   const url = `${base}/${os}/${filename}`;
 
   if (os.startsWith('win')) {
-    console.log(url)
     execSync('powershell.exe -nologo -noprofile -command "&{' +
       'Add-Type -AssemblyName System.IO.Compression.FileSystem;' +
       `(New-Object Net.WebClient).DownloadFile('${url}', '${filename}');` +
