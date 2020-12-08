@@ -1,3 +1,7 @@
+0.7.4 / 2020-12-08
+==================
+ * fix: update compatibility with windows and mongodb 4.4.0+ #56 [Xaseron](https://github.com/Xaseron)
+
 0.7.3 / 2020-11-27
 ==================
  * fix: use https to download mongodb #55 [Xaseron](https://github.com/Xaseron)
