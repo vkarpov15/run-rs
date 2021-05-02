@@ -63,23 +63,25 @@ module.exports = function download(version, systemLinux, os) {
       throw new Error(`Unrecognized os ${os}`);
   }
 
-  const url = path.join(base, os, filename);
+  const url = `${base}/${os}/${filename}`;
 
   if (os.startsWith('win')) {
     execSync('powershell.exe -nologo -noprofile -command "&{' +
       'Add-Type -AssemblyName System.IO.Compression.FileSystem;' +
       `(New-Object Net.WebClient).DownloadFile('${url}', '${filename}');` +
       `[System.IO.Compression.ZipFile]::ExtractToDirectory('${filename}', '.');` +
-      '}"'
-    );
+    '}"');
   } else {
     execSync(`curl -OL ${url}`);
     execSync(`tar -zxvf ${filename}`);
   }
 
+  const targetDir = path.join(mainScriptDir, version);
+
+  fs.rmSync(targetDir, { force: true, recursive: true })
   fs.renameSync(
     path.join(process.cwd(), dirname, 'bin'),
-    path.join(mainScriptDir, version)
+    targetDir
   );
   fs.rmSync(path.join(process.cwd(), dirname), { force: true, recursive: true });
   fs.rmSync(path.join(process.cwd(), filename));
