@@ -100,7 +100,15 @@ function* run() {
     console.log(chalk.blue('Skipping purge'));
   } else {
     console.log(chalk.blue('Purging database...'));
-    fs.rmSync(path.join(dbPath, '*'), { force: true, recursive: true })
+    const dir = fs.opendirSync(dbPath);
+
+    let file;
+    while (file = dir.readSync()) {
+      fs.rmSync(path.join(dbPath, file.name), {
+        force: true,
+        recursive: true
+      });
+    }
   }
 
   ports.forEach((port) => {
