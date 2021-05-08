@@ -103,6 +103,16 @@ run-rs --host example-associated-hostname
 ```
 **Note:** *Before you bind to other ip addresses, consider [enabling access control](https://docs.mongodb.com/manual/administration/security-checklist/#checklist-auth) and other security measures listed in [Security Checklist](https://docs.mongodb.com/manual/administration/security-checklist/) to prevent unauthorized access.*
 
+## Ports
+
+By default, run-rs will start MongoDB servers on ports 27017, 27018, and 27019.
+You can override this default using the `--portStart` option.
+For example, the below command will start MongoDB servers on ports 27000, 27001, and 27002.
+
+```
+run-rs --portStart 27000
+```
+
 ## Running in Production
 
 Do **not** use run-rs for running your production database. Run-rs is designed
