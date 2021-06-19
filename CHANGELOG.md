@@ -1,3 +1,7 @@
+0.7.5 / 2021-06-19
+==================
+ * fix: upgrade mongodb driver -> 3.6.x to fix deprecation warnings #59
+
 0.7.4 / 2020-12-08
 ==================
  * fix: update compatibility with windows and mongodb 4.4.0+ #56 [Xaseron](https://github.com/Xaseron)
