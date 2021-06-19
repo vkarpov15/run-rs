@@ -27,7 +27,7 @@
     "co": "4.6.0",
     "commander": "2.15.1",
     "moment": "2.22.2",
-    "mongodb": "3.3.x",
+    "mongodb": "3.6.x",
     "mongodb-topology-manager": "2.1.0",
     "prettyjson": "1.2.1"
   },
