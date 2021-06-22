@@ -1,6 +1,7 @@
 'use strict';
 
 const childProcess = require('child_process');
+const fs = require('fs');
 const path = require('path');
 
 module.exports = function download(version, systemLinux, os) {
@@ -68,19 +69,22 @@ module.exports = function download(version, systemLinux, os) {
     execSync('powershell.exe -nologo -noprofile -command "&{' +
       'Add-Type -AssemblyName System.IO.Compression.FileSystem;' +
       `(New-Object Net.WebClient).DownloadFile('${url}', '${filename}');` +
-      `[System.IO.Compression.ZipFile]::ExtractToDirectory('${filename}','.');` +
-      `mv './${dirname}/bin' '${mainScriptDir}/${version}';` +
-      `rd -r './${dirname}';` +
-      `rm './${filename}';` +
-      '}"'
-    );
+      `[System.IO.Compression.ZipFile]::ExtractToDirectory('${filename}', '.');` +
+    '}"');
   } else {
     execSync(`curl -OL ${url}`);
     execSync(`tar -zxvf ${filename}`);
-    execSync(`mv ./${dirname}/bin ${mainScriptDir}/${version}`);
-    execSync(`rm -rf ./${dirname}`);
-    execSync(`rm ./${filename}`);
   }
 
-  return { path: `${mainScriptDir}/${version}`, url: url };
+  const targetDir = path.join(mainScriptDir, version);
+
+  fs.rmSync(targetDir, { force: true, recursive: true })
+  fs.renameSync(
+    path.join(process.cwd(), dirname, 'bin'),
+    targetDir
+  );
+  fs.rmSync(path.join(process.cwd(), dirname), { force: true, recursive: true });
+  fs.rmSync(path.join(process.cwd(), filename));
+
+  return { path: path.join(mainScriptDir, version), url };
 };

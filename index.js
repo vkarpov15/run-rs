@@ -12,6 +12,7 @@ const fs = require('fs');
 const moment = require('moment');
 const mongodb = require('mongodb');
 const options = require('./src/options');
+const path = require('path');
 const prettyjson = require('prettyjson');
 const printHelp = require('./src/printHelp');
 const spawn = require('child_process').spawn;
@@ -38,7 +39,7 @@ function* run() {
   }
 
   const options = {};
-  const rcfile = isWin ? `${process.cwd()}\\.run-rs.rc` : `${process.cwd()}/.run-rs.rc`;
+  const rcfile = path.join(process.cwd(), '.run-rs.rc');
   if (fs.existsSync(rcfile)) {
     Object.assign(options, JSON.parse(fs.readFileSync(rcfile, 'utf8')));
   }
@@ -89,23 +90,31 @@ function* run() {
     dbPath = `${commander.dbpath}` ;
   }
   else {
-    dbPath = isWin ? `${process.cwd()}\\data` : `${process.cwd()}/data`;
+    dbPath = path.join(process.cwd(), 'data');
   }
 
   if (!fs.existsSync(`${dbPath}`)) {
-    execSync(isWin ? `md ${dbPath}` : `mkdir -p ${dbPath}`);
+    fs.mkdirSync(dbPath, { recursive: true });
   }
   if (commander.keep) {
     console.log(chalk.blue('Skipping purge'));
   } else {
     console.log(chalk.blue('Purging database...'));
-    execSync(isWin ? `del /S /Q ${dbPath}\\*` : `rm -rf ${dbPath}/*`);
+    const dir = fs.opendirSync(dbPath);
+
+    let file;
+    while (file = dir.readSync()) {
+      fs.rmSync(path.join(dbPath, file.name), {
+        force: true,
+        recursive: true
+      });
+    }
   }
 
   ports.forEach((port) => {
-    const portDBPath = isWin ? `${dbPath}\\${port}` : `${dbPath}/${port}`;
+    const portDBPath = path.join(dbPath, port.toString());;
     if (!fs.existsSync(portDBPath)) {
-      execSync(isWin ? `md ${dbPath}\\${port}` : `mkdir -p ${dbPath}/${port}`);
+      fs.mkdirSync(portDBPath);
     }
   });
 
@@ -113,8 +122,8 @@ function* run() {
   const rs = new ReplSet(mongod,
     ports.map(port => {
       const options = {
-        port: port,
-        dbpath: isWin ? `${dbPath}\\${port}` : `${dbPath}/${port}`,
+        port,
+        dbpath: path.join(dbPath, port.toString()),
         bind_ip: hostname
       };
       if (commander.bind_ip_all) {
