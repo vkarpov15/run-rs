@@ -29,7 +29,7 @@
     "moment": "2.22.2",
     "mongodb": "3.6.x",
     "mongodb-topology-manager": "2.1.0",
-    "prettyjson": "1.2.1"
+    "prettyjson": "1.2.2"
   },
   "devDependencies": {
     "eslint": "5.3.0",
