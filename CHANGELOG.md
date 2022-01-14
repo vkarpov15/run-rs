@@ -1,3 +1,7 @@
+0.7.6 / 2022-01-13
+==================
+ * fix: the new prettyjson 1.2.2 to fix colors #65 #64 [gracicot](https://github.com/gracicot)
+
 0.7.5 / 2021-06-19
 ==================
  * fix: upgrade mongodb driver -> 3.6.x to fix deprecation warnings #59
