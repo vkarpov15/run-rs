@@ -17,10 +17,10 @@ describe('download', function() {
 
   it('basic download', function() {
     let { url } = download('4.0.6', 'ubuntu1604', 'linux');
-    assert.equal(url, 'http://downloads.mongodb.org/linux/mongodb-linux-x86_64-4.0.6.tgz');
+    assert.equal(url, 'https://downloads.mongodb.org/linux/mongodb-linux-x86_64-4.0.6.tgz');
 
     ({ url } = download('4.2.0', 'ubuntu1604', 'linux'));
-    assert.equal(url, 'http://downloads.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-4.2.0.tgz');
+    assert.equal(url, 'https://downloads.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-4.2.0.tgz');
   });
 
   it('osx 4.2.0', function() {
@@ -30,6 +30,6 @@ describe('download', function() {
 
   it('osx < 4.2.0', function() {
     let { url } = download('4.0.6', null, 'darwin');
-    assert.equal(url, 'http://downloads.mongodb.org/osx/mongodb-osx-ssl-x86_64-4.0.6.tgz');
+    assert.equal(url, 'https://downloads.mongodb.org/osx/mongodb-osx-ssl-x86_64-4.0.6.tgz');
   });
 });
