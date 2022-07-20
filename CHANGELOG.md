@@ -1,3 +1,7 @@
+0.7.7 / 2022-07-20
+==================
+ * fix: upgrade moment dependency #68 [sanguineti](https://github.com/sanguineti)
+
 0.7.6 / 2022-01-13
 ==================
  * fix: the new prettyjson 1.2.2 to fix colors #65 #64 [gracicot](https://github.com/gracicot)
